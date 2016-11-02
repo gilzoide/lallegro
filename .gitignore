@@ -1,0 +1,6 @@
+# backups de texto
+*~
+*.swp
+
+# saídas
+build/
