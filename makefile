@@ -6,7 +6,7 @@ export pkgName := lallegro
 PREFIX = /usr/local
 BINDIR = $(PREFIX)/bin
 LIBDIR = $(PREFIX)/lib/lua/5.3/$(pkgName)
-LUADIR = $(PREFIX)/share/lua/5.3
+LUADIR = $(PREFIX)/share/lua/5.3/$(pkgName)
 CONFDIR = $(PREFIX)/etc
 
 
@@ -30,7 +30,7 @@ lallegro :
 
 install :
 	install -m $(permissions) $(libDir)/*.so $(LIBDIR)
-	install -m $(permissions) $(buildDir)/*.lua $(LUADIR)
+	install -m $(permissions) $(libDir)/*.lua $(LUADIR)
 
 .PHONY : clean run
 clean :
