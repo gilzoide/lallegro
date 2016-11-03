@@ -33,19 +33,8 @@ Bindings
 be dealt with later. Functions are renamed so the prefix `al_` is removed, so
 the calls to functions use the Lua module as the Allegro namespace.
 
-For functions that have arguments passed by reference for getting output,
-_lallegro_ uses Lua's multiple results to return them:
-
-    x, y = al.get_window_position (display)
-
-The exceptions are the event getters `al_get_next_event`, `al_peek_next_event`,
-`al_wait_for_event*`, to avoid desnecessary memory allocation:
-
-```lua
-local queue = al.create_event_queue ()
-local ev = al.ALLEGRO_EVENT ()
-al.wait_for_event (queue, ev)
-```
+Differences between the Allegro C API and this one is detailed
+[here](apidiff.md).
 
 
 Wrappers

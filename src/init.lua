@@ -16,6 +16,16 @@
 --]]
 
 --- Módulo
-local M = require 'lallegro.allegro'
+local al = require 'lallegro.allegro'
 
-return M
+--- Wrapper for al_get_display_mode with default 2nd parameter
+--
+-- @param idx Display mode index
+-- @param[opt=ALLEGRO_DISPLAY_MODE()] disp_mode Display mode to be filled, optional
+--
+-- @return Display mode at index
+function al.get_display_mode (idx, disp_mode)
+    return al._get_display_mode (idx, disp_mode or al.ALLEGRO_DISPLAY_MODE ())
+end
+
+return al

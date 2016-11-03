@@ -1,3 +1,4 @@
+// INOUT trouble, let's bind it on our own
 %native (al_get_next_config_section) int my_get_next_config_section (lua_State *L);
 %native (al_get_next_config_entry) int my_get_next_config_entry (lua_State *L);
 %{

@@ -11,14 +11,25 @@ printf ('Funcionando com Allegro %d, num sistema com %d cpus; %d RAM; Pasta: %s'
         , al.get_current_directory ())
 al.set_app_name 'lallegro teste'
 
-local disp_data = al.get_display_mode (1, al.ALLEGRO_DISPLAY_MODE ())
+-- Modos de display
+local disp_data = al.ALLEGRO_DISPLAY_MODE ()
+print ('Modos de display disponíveis:')
+for i = 0, al.get_num_display_modes () - 1 do
+    al.get_display_mode (i, disp_data)
+    printf ('  %d - %dx%d, formato: %d, refresh: %d', i, disp_data.width
+            , disp_data.height, disp_data.format, disp_data.refresh_rate)
+end
 
 
+al.get_display_mode (0, disp_data)
 -- al.set_new_display_flags (al.ALLEGRO_FULLSCREEN_WINDOW)
-printf ('Criando janela %dx%d', disp_data.width, disp_data.height)
 local display = assert (al.create_display (disp_data.width, disp_data.height))
-al.clear_to_color (al.map_rgb (100, 0, 0))
+printf ('Criando janela %dx%d na posição %dx%d', disp_data.width, disp_data.height
+        , al.get_window_position (display))
+local preto = al.map_rgb (0, 0, 0)
+al.clear_to_color (preto)
 al.flip_display ()
+printf ('Limpando tela de preto, que é (%d, %d, %d, %d)', al.unmap_rgba (preto))
 
 -- Teste dos eventos
 local queue = al.create_event_queue ()
