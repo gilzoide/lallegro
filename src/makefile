@@ -2,7 +2,7 @@
 
 # SWIG + C++ stuff
 interfaceSrc = allegro.i
-wrapSrc = $(buildDir)/allegro.cpp
+wrapSrc = $(buildDir)/wrap_allegro.c
 sharedObj = $(libDir)/allegro.so
 allegroIncludes = $(shell pkg-config --cflags-only-I allegro-5)
 allegroFlags = $(shell pkg-config --cflags allegro-5)

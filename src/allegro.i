@@ -10,6 +10,9 @@
 %include "allegro5/platform/alplatf.h"
 %include "allegro5/internal/alconfig.h"
 
+// Correção de aliasing de inteiros
+%apply unsigned int { uint32_t };
+
 // Ignores de funções com varargs
 %ignore al_vfprintf;
 %ignore al_fprintf;
@@ -26,10 +29,17 @@
 %include "allegro5/blender.h"
 %include "allegro5/clipboard.h"
 %include "allegro5/color.h"
-%include "allegro5/config.h"
+// Config, com tretas de INOUT
+%include "config.i"
+//
 %include "allegro5/cpu.h"
 %include "allegro5/debug.h"
+// Display
+%apply int *OUTPUT { int *importance };
+%apply int *OUTPUT { int *x, int *y };
+%apply int *OUTPUT { int *min_w, int *min_h, int *max_w, int *max_h };
 %include "allegro5/display.h"
+//
 %include "allegro5/drawing.h"
 %include "allegro5/error.h"
 %include "allegro5/events.h"
@@ -55,3 +65,12 @@
 %include "allegro5/touch_input.h"
 %include "allegro5/transformations.h"
 %include "allegro5/utf8.h"
+
+// Função extra: al_init
+%native (init) int my_init (lua_State *L);
+%{
+int my_init (lua_State *L) {
+    lua_pushboolean (L, al_init ());
+    return 1;
+}
+%}
