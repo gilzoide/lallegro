@@ -19,13 +19,8 @@
 local al = require 'lallegro.allegro'
 
 --- Wrapper for al_get_display_mode with default 2nd parameter
---
--- @param idx Display mode index
--- @param[opt=ALLEGRO_DISPLAY_MODE()] disp_mode Display mode to be filled, optional
---
--- @return Display mode at index
-function al.get_display_mode (idx, disp_mode)
-    return al._get_display_mode (idx, disp_mode or al.ALLEGRO_DISPLAY_MODE ())
+function al.get_display_mode (index, mode)
+    return al._get_display_mode (index, mode or al.ALLEGRO_DISPLAY_MODE ())
 end
 
 -- Unstable API with default output parameters
@@ -65,6 +60,18 @@ end
 function al.get_monitor_info (adapter, info)
     info = info or al.ALLEGRO_MONITOR_INFO ()
     return al._get_monitor_info (adapter, info), info
+end
+
+--- Wrapper for al_get_mouse_state with default 1st parameter
+function al.get_mouse_state (ret_state)
+    ret_state = ret_state or al.ALLEGRO_MOUSE_STATE ()
+    al._get_mouse_state (ret_state)
+    return ret_state
+end
+
+--- Wrapper for al_path_cstr with default 2nd parameter
+function al.path_cstr (path, delim)
+    return al._path_cstr (path, delim or al.ALLEGRO_NATIVE_PATH_SEP)
 end
 
 return al

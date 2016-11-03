@@ -86,12 +86,22 @@
 // Monitor: OUTPUT on Lua
 %rename al_get_monitor_info al__get_monitor_info;
 %include "allegro5/monitor.h"
-//
+// Mouse: OUTPUT on Lua, OUTPUT
+%rename al_get_mouse_state al__get_mouse_state;
+%apply int *OUTPUT { int *ret_x, int *ret_y };
 %include "allegro5/mouse.h"
+//
 %include "allegro5/mouse_cursor.h"
+// Path: default argument
+%rename al_path_cstr al__path_cstr;
 %include "allegro5/path.h"
+//
 %include "allegro5/render_state.h"
+// Shader: array -> tables
+%apply (int *INPUT, int) { (const int *i, int num_elems) };
+%apply (float *INPUT, int) { (const float *f, int num_elems) };
 %include "allegro5/shader.h"
+//
 %include "allegro5/system.h"
 %include "allegro5/threads.h"
 %include "allegro5/timer.h"

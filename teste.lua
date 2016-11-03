@@ -7,7 +7,6 @@ end
 
 al = require 'lallegro'
 assert (al.init ())
-print (al.free ())
 printf ('Funcionando com Allegro %d %s, num sistema com %d cpus; %d RAM; Pasta: %s'
 		, al.get_allegro_version () >> 24, al.UNSTABLE and '(UNSTABLE)' or ''
         , al.get_cpu_count (), al.get_ram_size ()
@@ -41,6 +40,27 @@ local preto = al.map_rgb (0, 0, 0)
 al.clear_to_color (preto)
 al.flip_display ()
 printf ('Limpando tela de preto, que é (%d, %d, %d, %d)', al.unmap_rgba (preto))
+
+-- Teste do mouse
+printf ('Mouse na posição (%d, %d)', select (2, al.get_mouse_cursor_position ()))
+
+-- Teste dos shaders
+local sh = al.create_shader (al.ALLEGRO_SHADER_AUTO)
+if not al.attach_shader_source (sh, al.ALLEGRO_PIXEL_SHADER, [[
+uniform vec4 teste;
+uniform ivec3 testei;
+
+void main () {
+    gl_FragColor = teste;
+}
+]]) then
+    print (al.get_shader_log (sh))
+    return
+end
+assert (al.build_shader (sh), 'Deu bosta no build_shader =/')
+al.use_shader (sh)
+al.set_shader_float_vector ('teste', 1, { 1, 1, 0, 1 })
+al.set_shader_int_vector ('testei', 1, { 2, 4, 0 })
 
 -- Teste dos eventos
 local queue = al.create_event_queue ()
