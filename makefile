@@ -13,6 +13,7 @@ CONFDIR = $(PREFIX)/etc
 # My stuff
 export buildDir := $(CURDIR)/build
 export libDir := $(buildDir)/$(pkgName)
+export UNSTABLE := $(UNSTABLE)
 
 srcdir = src
 permissions = 644

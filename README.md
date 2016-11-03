@@ -50,6 +50,9 @@ With [make](https://www.gnu.org/software/make/):
 
     $ make
 
+Call with `UNSTABLE=1` for compiling with [Allegro Unstable
+API](http://liballeg.org/a5docs/trunk/getting_started.html#unstable-api)
+
 
 Installing
 ----------

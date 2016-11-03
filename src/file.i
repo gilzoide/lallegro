@@ -18,7 +18,7 @@ int my_fgets (lua_State *L) {
     SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
     arg3 = (size_t)lua_tonumber(L, 2);
     // allocate the buffer to max
-    arg2 = malloc (arg3);
+    arg2 = al_malloc (arg3);
     if (!arg2) {
         lua_pushliteral (L, "Couldn't allocate enough buffer for \"fgets\"");
         SWIG_fail;
@@ -27,7 +27,7 @@ int my_fgets (lua_State *L) {
     result = (char *)al_fgets(arg1,arg2,arg3);
     lua_pushstring(L,(const char *)result); SWIG_arg++;
     // and free it, no memory leaks allowed ;]
-    free (arg2);
+    al_free (arg2);
     return SWIG_arg;
 
     if(0) SWIG_fail;

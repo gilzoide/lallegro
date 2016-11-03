@@ -5,7 +5,11 @@ interfaceSrc = allegro.i
 wrapSrc = $(buildDir)/wrap_allegro.c
 sharedObj = $(libDir)/allegro.so
 allegroIncludes = $(shell pkg-config --cflags-only-I allegro-5)
-allegroFlags = $(shell pkg-config --cflags allegro-5)
+# enable Allegro Unstable API
+ifdef UNSTABLE
+DEFINES = -DALLEGRO_UNSTABLE
+endif
+allegroFlags = $(shell pkg-config --cflags allegro-5) $(DEFINES)
 allegroLinks = $(shell pkg-config --libs allegro-5)
 
 CC = gcc
@@ -21,7 +25,7 @@ all : interface shared lua
 
 # and each submodule in it's module's dir
 interface : $(interfaceSrc)
-	swig -I/usr/include -o $(wrapSrc) -lua $<
+	swig -I/usr/include $(DEFINES) -o $(wrapSrc) -lua $<
 	sed -i 's/"al_/"/' $(wrapSrc)
 
 shared : $(wrapSrc)

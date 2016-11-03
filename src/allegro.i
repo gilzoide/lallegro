@@ -67,15 +67,26 @@
 // FSHook: Buffer alloc
 %newobject al_get_current_directory;
 %include "allegro5/fshook.h"
-// Fullscreen modes: rename al_get_display_mode, and provide a better binding from lua
+// Fullscreen modes: OUTPUT on Lua
 %rename al_get_display_mode al__get_display_mode;
 %include "allegro5/fullscreen_mode.h"
-//
+// Haptic: OUTPUT on Lua
+%rename al_upload_haptic_effect al__upload_haptic_effect;
+%rename al_upload_and_play_haptic_effect al__upload_and_play_haptic_effect;
+%rename al_rumble_haptic al__rumble_haptic;
 %include "allegro5/haptic.h"
+// Joystick: OUTPUT on Lua
+%rename al_get_joystick_state al__get_joystick_state;
 %include "allegro5/joystick.h"
+// Keyboard: OUTPUT on Lua
+%rename al_get_keyboard_state al__get_keyboard_state;
 %include "allegro5/keyboard.h"
-%include "allegro5/memory.h"
+// Memory: macros
+%include "memory.i"
+// Monitor: OUTPUT on Lua
+%rename al_get_monitor_info al__get_monitor_info;
 %include "allegro5/monitor.h"
+//
 %include "allegro5/mouse.h"
 %include "allegro5/mouse_cursor.h"
 %include "allegro5/path.h"
@@ -102,3 +113,7 @@ int my_init (lua_State *L) {
     return 1;
 }
 %}
+
+#ifdef ALLEGRO_UNSTABLE
+%constant bool UNSTABLE = true;
+#endif
