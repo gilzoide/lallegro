@@ -29,21 +29,23 @@ al.destroy_display (disp)
 
 Bindings
 --------
-1 to 1 function binding is provided. Functions are renamed so the prefix `al_`
-is removed, so the calls to functions use the Lua module as the Allegro
-namespace.
+1 to 1 function binding is provided for stuff in `allegro.h`. Addons will
+be dealt with later. Functions are renamed so the prefix `al_` is removed, so
+the calls to functions use the Lua module as the Allegro namespace.
 
 For functions that have arguments passed by reference for getting output,
 _lallegro_ uses Lua's multiple results to return them:
 
     x, y = al.get_window_position (display)
 
-If argument is input
-and output, you pass the value, and receive the output as function return:
+The exceptions are the event getters `al_get_next_event`, `al_peek_next_event`,
+`al_wait_for_event*`, to avoid desnecessary memory allocation:
 
-    sec, it = al.get_next_config_section (it)
-
-Addons are not dealt with for now, `allegro.h` only.
+```lua
+local queue = al.create_event_queue ()
+local ev = al.ALLEGRO_EVENT ()
+al.wait_for_event (queue, ev)
+```
 
 
 Wrappers

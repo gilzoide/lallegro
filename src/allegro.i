@@ -11,11 +11,13 @@
 %include "allegro5/internal/alconfig.h"
 
 // Correção de aliasing de inteiros
+%apply int { int32_t, int16_t };
 %apply unsigned int { uint32_t };
 
-// Ignores de funções com varargs
-%ignore al_vfprintf;
+// Ignores de funções com va_args, que buga no SWIG
+// Use a formatação pelo Lua, e escreva com `al_puts`
 %ignore al_fprintf;
+%ignore al_vfprintf;
 %ignore al_ustr_vappendf;
 //
 
@@ -29,12 +31,12 @@
 %include "allegro5/blender.h"
 %include "allegro5/clipboard.h"
 %include "allegro5/color.h"
-// Config, com tretas de INOUT
+// Config: com tretas de INOUT
 %include "config.i"
 //
 %include "allegro5/cpu.h"
 %include "allegro5/debug.h"
-// Display
+// Display: OUTPUT
 %apply int *OUTPUT { int *importance };
 %apply int *OUTPUT { int *x, int *y };
 %apply int *OUTPUT { int *min_w, int *min_h, int *max_w, int *max_h };
@@ -43,10 +45,15 @@
 %include "allegro5/drawing.h"
 %include "allegro5/error.h"
 %include "allegro5/events.h"
-%include "allegro5/file.h"
+// File: buffer initialization, make_temp_file multi return
+%include "file.i"
+//
 %include "allegro5/fixed.h"
 %include "allegro5/fmaths.h"
+// FSHook: Buffer alloc
+%newobject al_get_current_directory;
 %include "allegro5/fshook.h"
+//
 %include "allegro5/fullscreen_mode.h"
 %include "allegro5/haptic.h"
 %include "allegro5/joystick.h"
