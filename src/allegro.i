@@ -14,25 +14,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Lallegro.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/** Allegro Core module **/
 %module lallegro_allegro
 
-%{
-#include <allegro5/allegro.h>
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
-%}
-
-%include <typemaps.i>
-
-// Needed for SWIG to understand the AL_FUNC macro
-%include <allegro5/platform/alplatf.h>
-%include <allegro5/internal/alconfig.h>
-
-// Integer type alias correction
-%apply int { int32_t, int16_t };
-%apply unsigned int { uint32_t };
-%apply long int { int64_t };
+%include "common.i"
 
 // Ignores va_args functions, as SWIG doesn't handle them well
 // Instead of `al_fprintf`, format the string on Lua and call `al_puts` instead
@@ -160,7 +146,7 @@
  */
 
 // Extra function: al_init
-%native (init) int my_init (lua_State *L);
+%native (_init) int my_init (lua_State *L);
 %{
 int my_init (lua_State *L) {
     lua_pushboolean (L, al_init ());

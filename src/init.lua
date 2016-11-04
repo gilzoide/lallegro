@@ -15,8 +15,48 @@
 -- along with Lallegro.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
---- Módulo
+--- Submodules that will compose our lallegro module
 local al = require 'lallegro.allegro'
+al.image = require 'lallegro.image'
+
+--- Initializes Allegro and whatever addon you want
+--
+-- Valid addons are, for now: 'image'
+function al.init (...)
+    if not al._init () then return nil, "[lallegro.init] Couldn't initialize Allegro" end
+    for _, addon in ipairs { ... } do
+        local mod = al[addon]
+        if not mod then return nil, "[lallegro.init] Addon \"" .. addon .. "\" not supported" end
+        if not mod['init_' .. addon .. "_addon"] () then return nil, "[lallegro.init] Couldn't initialize " .. addon .. " addon" end
+    end
+    return true
+end
+
+--- Installs the specified drivers
+--
+-- Valid drivers are: 'haptic', 'joystick', 'keyboard', 'mouse', 'touch_input',
+-- and 'audio' if the 'audio' addon was initialized
+function al.install (...)
+    for _, driver in ipairs { ... } do
+        local installer = al['install_' .. driver]
+        if not installer then return nil, "[lallegro.install] Driver \"" .. driver .. "\" not supported" end
+        if not installer () then return nil, "[lallegro.install] Couldn't install " .. driver .. " driver" end
+    end
+    return true
+end
+
+--- Unnstalls the specified drivers
+--
+-- Valid drivers are: 'haptic', 'joystick', 'keyboard', 'mouse', 'touch_input',
+-- and 'audio' if the 'audio' addon was initialized
+function al.uninstall (...)
+    for _, driver in ipairs { ... } do
+        local uninstaller = al['uninstall_' .. driver]
+        if not uninstaller then return nil, "[lallegro.uninstall] Driver \"" .. driver .. "\" not supported" end
+        uninstaller ()
+    end
+    return true
+end
 
 --- Wrapper for al_get_display_mode with default 2nd parameter
 function al.get_display_mode (index, mode)

@@ -1,16 +1,15 @@
 ## Lallegro Makefile ##
 
-# SWIG + C++ stuff
-interfaceSrc = allegro.i
-wrapSrc = $(buildDir)/wrap_allegro.c
-sharedObj = $(libDir)/allegro.so
+submods = allegro image
+
+# Allegro stuff
 allegroIncludes = $(shell pkg-config --cflags-only-I allegro-5)
 # enable Allegro Unstable API
 ifdef UNSTABLE
 DEFINES = -DALLEGRO_UNSTABLE
 endif
 allegroFlags = $(shell pkg-config --cflags allegro-5) $(DEFINES)
-allegroLinks = $(shell pkg-config --libs allegro-5)
+allegroLinks = $(shell pkg-config --libs allegro-5 allegro_image-5)
 
 CC = gcc
 CFLAGS = -Wall -O2 $(allegroFlags)
@@ -20,16 +19,19 @@ LINKS = $(allegroLinks)
 luaSrc = $(wildcard *.lua)
 
 # Build #
-all : interface shared lua
+all : $(submods:=.so) lua
 
 
-# and each submodule in it's module's dir
-interface : $(interfaceSrc)
-	swig -I/usr/include $(DEFINES) -o $(wrapSrc) -lua $<
-	sed -i 's/"al_/"/' $(wrapSrc)
+# each submodule depends on it's C wrapper for Lua...
+%.so : $(buildDir)/wrap_%.c
+	$(CC) -o $(libDir)/$@ $< -fPIC -shared $(CFLAGS) $(LINKS)
+
+# ...that is generated using SWIG
+$(buildDir)/wrap_%.c : %.i
+	swig -I/usr/include $(DEFINES) -o $@ -lua $<
+	sed -i 's/"al_/"/' $@
 
 shared : $(wrapSrc)
-	$(CC) -o $(sharedObj) $< -fPIC -shared $(CFLAGS) $(LINKS)
 
 
 # and copy the ".lua" file(s)
