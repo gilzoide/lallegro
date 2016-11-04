@@ -128,10 +128,20 @@
 }
 %rename al_store_state al__store_state;
 %include <allegro5/tls.h>
-//
+// Touch Input: OUTPUT on Lua
+%rename al_get_touch_input_state al__get_touch_input_state;
 %include <allegro5/touch_input.h>
+// Transformations: OUTPUT on Lua, INOUT
+%rename al_copy_transform al__copy_transform;
+%rename al_identity_transform al__identity_transform;
+%rename al_build_transform al__build_transform;
+%rename al_build_camera_transform al__build_camera_transform;
+%apply float *INOUT { float *x, float *y, float *z };
 %include <allegro5/transformations.h>
-%include <allegro5/utf8.h>
+/* UTF-8: Lua 5.3 gives us basic UTF-8 encoding, and Allegro API doesn't really
+ * add much to it, aside from memory concerns (which don't apply to Lua)
+ * %include <allegro5/utf8.h>
+ */
 
 // Extra function: al_init
 %native (init) int my_init (lua_State *L);

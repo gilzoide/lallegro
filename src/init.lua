@@ -140,4 +140,59 @@ function al.bpm_to_secs (bpm)
     return 60 / bpm
 end
 
+--- Wrapper for al_get_touch_input_state with default 1st parameter
+function al.get_touch_input_state (ret_state)
+    ret_state = ret_state or al.ALLEGRO_TOUCH_INPUT_STATE ()
+    al._get_touch_input_state (ret_state)
+    return ret_state
+end
+
+--- Wrapper for al_copy_transform with default 1st parameter
+function al.copy_transform (dest, src)
+    if src == nil then
+        src = dest
+        dest = al.ALLEGRO_TRANSFORM ()
+    end
+    al._copy_transform (dest, src)
+    return dest
+end
+
+--- Wrapper for al_identity_transform with default 1st parameter
+function al.identity_transform (trans)
+    trans = trans or al.ALLEGRO_TRANSFORM ()
+    al._identity_transform (trans)
+    return trans
+end
+
+--- Wrapper for al_build_transform with default 1st parameter
+function al.build_transform (trans, x, y, sx, sy, theta)
+    if type (trans) == 'number' then
+        x, y, sx, sy, theta = trans, x, y, sx, sy
+        trans = al.ALLEGRO_TRANSFORM ()
+    end
+    al._build_transform (trans, x, y, sx, sy, theta)
+    return trans
+end
+
+--- Wrapper for al_build_camera_transform with default 1st parameter
+function al.build_camera_transform (trans
+        , position_x, position_y, position_z
+        , look_x, look_y, look_z
+        , up_x, up_y, up_z)
+    if type (trans) == 'number' then
+        position_x, position_y, position_z
+                , look_x, look_y, look_z
+                , up_x, up_y, up_z
+                = trans, position_x, position_y
+                , position_z, look_x, look_y
+                , look_z, up_x, up_y
+        trans = al.ALLEGRO_TRANSFORM ()
+    end
+    al._build_camera_transform (trans
+            , position_x, position_y, position_z
+            , look_x, look_y, look_z
+            , up_x, up_y, up_z)
+    return trans
+end
+
 return al

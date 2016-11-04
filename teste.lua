@@ -65,11 +65,17 @@ al.set_shader_int_vector ('testei', 1, { 2, 4, 0 })
 -- Teste dos eventos
 local queue = al.create_event_queue ()
 al.register_event_source (queue, al.get_display_event_source (display))
+assert (al.install_mouse (), 'Deu bosta no install mouse =/')
+al.register_event_source (queue, al.get_mouse_event_source ())
 print ('Táca-le X (botão de fechar mesmo) pra fechar a janela')
 local ev = al.ALLEGRO_EVENT ()
 while true do
     al.wait_for_event (queue, ev)
-    if ev.type == al.ALLEGRO_EVENT_DISPLAY_CLOSE then break end
+    if ev.type == al.ALLEGRO_EVENT_DISPLAY_CLOSE then
+        break
+    elseif ev.type == al.ALLEGRO_EVENT_MOUSE_BUTTON_DOWN then
+        printf ('Mouse clicou na posição (%d, %d)', ev.mouse.x, ev.mouse.y)
+    end
 end
 al.destroy_display (display)
 al.destroy_event_queue (queue)
@@ -108,3 +114,8 @@ if al.UNSTABLE then
     end
 end
 
+
+--- Teste de transforms
+local id = al.identity_transform ()
+local outra_id = al.copy_transform (id)
+print (id, outra_id)
