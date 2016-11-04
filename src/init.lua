@@ -56,6 +56,32 @@ function al.get_keyboard_state (ret_state)
     return ret_state
 end
 
+--[[  Memory MACROS  ]]--
+local function get_context_info ()
+    local dbg = debug.getinfo (3, "Sln")
+    return dbg.currentline, dbg.short_src, dbg.name
+end
+--- Wrapper for al_malloc_with_context, with the context curried
+function al.malloc (n)
+    return lallegro_allegro.malloc_with_context (n, get_context_info ())
+end
+
+--- Wrapper for al_free_with_context, with the context curried
+function al.free (ptr)
+    return lallegro_allegro.free_with_context (ptr, get_context_info ())
+end
+
+--- Wrapper for al_realloc_with_context, with the context curried
+function al.realloc (ptr, n)
+    return lallegro_allegro.realloc_with_context (ptr, n, get_context_info ())
+end
+
+--- Wrapper for al_calloc_with_context, with the context curried
+function al.calloc (count, n)
+    return lallegro_allegro.free_with_context (count, n, get_context_info ())
+end
+--[[  END Memory MACROS  ]]--
+
 --- Wrapper for al_get_monitor_info with default 2nd parameter
 function al.get_monitor_info (adapter, info)
     info = info or al.ALLEGRO_MONITOR_INFO ()
@@ -72,6 +98,46 @@ end
 --- Wrapper for al_path_cstr with default 2nd parameter
 function al.path_cstr (path, delim)
     return al._path_cstr (path, delim or al.ALLEGRO_NATIVE_PATH_SEP)
+end
+
+--- Wrapper for al_store_state with default 1st parameter
+function al.store_state (state, flags)
+    if type (state) == 'number' then
+        flags = state
+        state = al.ALLEGRO_STATE ()
+    end
+    al._store_state (state, flags)
+    return state
+end
+
+--- Wrapper for al_store_state with default 1st parameter
+function al.init_timeout (timeout, seconds)
+    if type (timeout) == 'number' then
+        seconds = timeout
+        timeout = al.ALLEGRO_TIMEOUT ()
+    end
+    al._init_timeout (timeout, seconds)
+    return timeout
+end
+
+--- ALLEGRO_USECS_TO_SECS macro as function
+function al.usecs_to_secs (us)
+    return us / 1000000.0
+end
+
+--- ALLEGRO_MSECS_TO_SECS macro as function
+function al.msecs_to_secs (ms)
+    return ms / 1000.0
+end
+
+--- ALLEGRO_BPS_TO_SECS macro as function
+function al.bps_to_secs (bps)
+    return 1 / bps
+end
+
+--- ALLEGRO_BPM_TO_SECS macro as function
+function al.bpm_to_secs (bpm)
+    return 60 / bpm
 end
 
 return al

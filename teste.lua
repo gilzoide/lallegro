@@ -100,10 +100,11 @@ if al.UNSTABLE then
     if num_joys > 0 then
         local joy = assert (al.get_joystick (0))
         local hap = assert (al.get_haptic_from_joystick (joy))
-        local effect = al.rumble_haptic (hap, 0.5, 1)
+        al.rumble_haptic (hap, 0.5, 1)
         al.rest (1)
         al.release_haptic (hap)
     else
         print "Conecte o controle pra vibrar xD"
     end
 end
+

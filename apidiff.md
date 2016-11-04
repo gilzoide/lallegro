@@ -1,6 +1,22 @@
 C and Lua API differences
 =========================
 
+Macros
+------
+Some Allegro functionality is facilitated by preprocessor macros. _Lallegro_
+implements them as functions, always using lower case. Macros implemented:
+
+- `al_init`
+- `al_malloc`
+- `al_free`
+- `al_realloc`
+- `al_calloc`
+- `ALLEGRO_USECS_TO_SECS` as `usecs_to_secs`
+- `ALLEGRO_MSECS_TO_SECS` as `msecs_to_secs`
+- `ALLEGRO_BPS_TO_SECS` as `bps_to_secs`
+- `ALLEGRO_BPM_TO_SECS` as `bpm_to_secs`
+
+
 Argument Output
 ---------------
 For functions that have arguments passed by reference for getting output,
@@ -44,3 +60,9 @@ Var args
 SWIG doesn't handle var args functions very well, thus the functions
 `al_fprintf`, `al_vfprintf`, `al_ustr_vappendf` are not binded. One can always
 format a string directly in Lua using `string.format`, so this ain't no trouble.
+
+
+Threads
+-------
+Threads in Lua aren't that easy to handle, so Allegro thread API isn't bound.
+Use coroutines or some other threading Lua library for this.
