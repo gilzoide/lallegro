@@ -56,7 +56,8 @@ API](http://liballeg.org/a5docs/trunk/getting_started.html#unstable-api)
 
 Installing
 ----------
-Using [LuaRocks](https://luarocks.org/) remote:
+Using [LuaRocks](https://luarocks.org/)
+[remote](https://luarocks.org/modules/gilzoide/lallegro):
 
     # luarocks install --server=http://luarocks.org/dev lallegro
 

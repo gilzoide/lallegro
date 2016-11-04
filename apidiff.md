@@ -6,11 +6,11 @@ Macros
 Some Allegro functionality is facilitated by preprocessor macros. _Lallegro_
 implements them as functions, always using lower case. Macros implemented:
 
-- `al_init`
-- `al_malloc`
-- `al_free`
-- `al_realloc`
-- `al_calloc`
+- `al_init` as `init`
+- `al_malloc` as `malloc`
+- `al_free` as `free`
+- `al_realloc` as `realloc`
+- `al_calloc` as `calloc`
 - `ALLEGRO_USECS_TO_SECS` as `usecs_to_secs`
 - `ALLEGRO_MSECS_TO_SECS` as `msecs_to_secs`
 - `ALLEGRO_BPS_TO_SECS` as `bps_to_secs`
@@ -66,3 +66,9 @@ Threads
 -------
 Threads in Lua aren't that easy to handle, so Allegro thread API isn't bound.
 Use coroutines or some other threading Lua library for this.
+
+
+UTF-8
+-----
+Lua 5.3 have basic UTF-8 encoding, and Allegro's UTF-8 API doesn't really add
+much to it, aside from memory concerns (which don't apply to Lua), so not bound.
