@@ -20,8 +20,8 @@
 -- [Allegro Reference](http://liballeg.org/a5docs/trunk/index.html) for info
 -- on the functions.
 
---- Submodules that will compose our lallegro module
-local al = require 'lallegro.allegro'
+-- Start off with the Core
+local al = require 'lallegro.core'
 
 --- Initializes Allegro and whatever addon you want
 --

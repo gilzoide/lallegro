@@ -1,4 +1,4 @@
-package = 'Lallegro'
+package = 'lallegro'
 version = 'scm-1'
 source = {
 	url = 'git://github.com/gilzoide/lallegro',
@@ -20,22 +20,9 @@ external_dependencies = {
 	}
 }
 build = {
-	type = 'make',
-	makefile = 'makefile',
-	build_variables = {
-		CFLAGS = '$(CFLAGS)',
-		LIBFLAG = '$(LIBFLAG)',
-		LUA_LIBDIR = '$(LUA_LIBDIR)',
-		LUA_BINDIR = '$(LUA_BINDIR)',
-		LUA_INCDIR = '$(LUA_INCDIR)',
-		LUA = '$(LUA)',
-	},
-	install_variables = {
-		PREFIX = '$(PREFIX)',
-		BINDIR = '$(BINDIR)',
-		LIBDIR = '$(LIBDIR)',
-		LUADIR = '$(LUADIR)',
-		CONFDIR = '$(CONFDIR)',
+	type = 'cmake',
+	variables = {
+		CMAKE_INSTALL_PREFIX = '/usr',
+		ALLEGRO_UNSTABLE = 1,
 	},
 }
-

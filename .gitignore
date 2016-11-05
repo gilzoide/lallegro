@@ -3,5 +3,5 @@
 *.swp
 
 # saídas
-build/
+build*/
 doc/

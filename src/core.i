@@ -16,7 +16,7 @@
  */
 
 /** Allegro Core module **/
-%module lallegro_allegro
+%module lallegro_core
 
 %include "common.i"
 

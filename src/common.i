@@ -33,3 +33,6 @@
 %apply int { int32_t, int16_t };
 %apply unsigned int { uint32_t };
 %apply long int { int64_t };
+
+// Strip the prepending "al_" from functions, so we use Lua's module as namespace
+%rename ("%(strip:[al_])s") "";
