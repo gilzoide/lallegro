@@ -1,6 +1,6 @@
 ## Lallegro Makefile ##
 
-submods = allegro font ttf image color memfile
+submods = allegro font ttf image color memfile dialog physfs
 
 # Allegro stuff
 allegroIncludes = $(shell pkg-config --cflags-only-I allegro-5)
@@ -9,7 +9,7 @@ ifdef UNSTABLE
 DEFINES = -DALLEGRO_UNSTABLE
 endif
 allegroFlags = $(shell pkg-config --cflags allegro-5) $(DEFINES)
-allegroLinks = $(shell pkg-config --libs allegro-5 allegro_{image,font,ttf,color,memfile}-5)
+allegroLinks = $(shell pkg-config --libs allegro-5 allegro_{image,font,ttf,color,memfile,dialog,physfs}-5)
 
 CC = gcc
 CFLAGS = -Wall -O2 -fPIC $(allegroFlags)
@@ -28,6 +28,7 @@ all : $(submods:=.so) lua
 
 # ...that is generated using SWIG
 .PRECIOUS : $(buildDir)/wrap_%.c
+.PRECIOUS : $(buildDir)/wrap_%.o
 $(buildDir)/wrap_%.c : %.i
 	swig -I/usr/include $(DEFINES) -o $@ -lua $<
 	sed -i 's/"al_/"/' $@

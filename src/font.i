@@ -89,3 +89,16 @@ ALLEGRO_FONT *al_load_bitmap_font(const char *fname);
 ALLEGRO_FONT *al_load_bitmap_font_flags(const char *fname, int flags);
 
 ALLEGRO_FONT *al_create_builtin_font(void);
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Macros and Enums, again by hand
+enum {
+   ALLEGRO_NO_KERNING       = -1,
+   ALLEGRO_ALIGN_LEFT       = 0,
+   ALLEGRO_ALIGN_CENTRE     = 1,
+   ALLEGRO_ALIGN_CENTER     = 1,
+   ALLEGRO_ALIGN_RIGHT      = 2,
+   ALLEGRO_ALIGN_INTEGER    = 4,
+};
+

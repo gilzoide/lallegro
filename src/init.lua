@@ -285,5 +285,12 @@ end
 
 import_all (require 'lallegro.color')
 import_all (require 'lallegro.memfile')
+import_all (require 'lallegro.physfs')
+import_all (require 'lallegro.dialog')
+
+--- Wrapper for al_append_native_text_log, with '%s' as format
+function al.append_native_text_log (textlog, text)
+    al._append_native_text_log (textlog, '%s', text)
+end
 
 return al

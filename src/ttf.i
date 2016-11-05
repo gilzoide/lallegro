@@ -49,3 +49,10 @@ uint32_t al_get_allegro_ttf_version(void);
 bool al_get_glyph(const ALLEGRO_FONT *f, int prev_codepoint, int codepoint
         , ALLEGRO_GLYPH *glyph);
 #endif
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Macros and Enums, again by hand
+#define ALLEGRO_TTF_NO_KERNING  1
+#define ALLEGRO_TTF_MONOCHROME  2
+#define ALLEGRO_TTF_NO_AUTOHINT 4

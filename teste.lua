@@ -1,13 +1,19 @@
 #!/usr/bin/env lua
 
-local function printf (fmt, ...)
-	print (fmt:format (...))
+
+al = require 'lallegro'
+assert (al.init ('image', 'font', 'ttf', 'native_dialog'))
+local log = al.open_native_text_log ('LOG', al.ALLEGRO_TEXTLOG_MONOSPACE)
+print = function (what)
+	al.append_native_text_log (log, tostring (what) .. '\n')
 end
 
 
-al = require 'lallegro'
-assert (al.init ('image', 'font', 'ttf'))
 assert (al.install ('mouse'))
+
+local function printf (fmt, ...)
+	print (fmt:format (...))
+end
 printf ('Funcionando com Allegro %d %s, num sistema com %d cpus; %d RAM; Pasta: %s'
 		, al.get_allegro_version () >> 24, al.UNSTABLE and '(UNSTABLE)' or ''
         , al.get_cpu_count (), al.get_ram_size ()
@@ -139,3 +145,5 @@ local _, ranges = al.get_font_ranges (font, 2)
 for i, r in ipairs (ranges) do print (i, r) end
 
 print (al.color_rgb_to_html (1, 1, 1))
+
+al.show_native_message_box (nil, 'Título', 'Tiau', 'Já vai?', 'falooooooows', al.ALLEGRO_MESSAGEBOX_WARN)
