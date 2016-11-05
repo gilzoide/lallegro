@@ -20,13 +20,16 @@ permissions = 644
 
 
 # now build!
-all : buildDir lallegro
+all : buildDir swig lua
 
 buildDir :
 	@mkdir -p $(libDir)
 
-lallegro :
-	$(MAKE) -C $(srcdir) all
+swig :
+	$(MAKE) -C $(srcdir) swig
+
+lua :
+	$(MAKE) -C $(srcdir) lua
 
 
 install :

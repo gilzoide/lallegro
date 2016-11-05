@@ -31,6 +31,16 @@
 /* Manually included functions, as SWIG is only preprocessing ALLEGRO_FONT_FUNC
  * to AL_FUNC, and complaining that AL_FUNC isn't valid C
  */
+////////////////////////////////////////////////////////////////////////////////
+// Types
+typedef struct ALLEGRO_FONT ALLEGRO_FONT;
+
+#ifdef ALLEGRO_UNSTABLE
+typedef struct ALLEGRO_GLYPH ALLEGRO_GLYPH;
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
+// General font routines
 bool al_init_font_addon(void);
 
 void al_shutdown_font_addon(void);
@@ -66,6 +76,8 @@ void al_set_fallback_font(ALLEGRO_FONT *font, ALLEGRO_FONT *fallback);
 
 ALLEGRO_FONT *al_get_fallback_font(ALLEGRO_FONT *font);
 
+////////////////////////////////////////////////////////////////////////////////
+// Per glyph text handling
 void al_draw_glyph(const ALLEGRO_FONT *f, ALLEGRO_COLOR color, float x, float y
         , int codepoint);
 
@@ -77,10 +89,14 @@ bool al_get_glyph_dimensions(const ALLEGRO_FONT *f, int codepoint
 
 int al_get_glyph_advance(const ALLEGRO_FONT *f, int codepoint1, int codepoint2);
 
+////////////////////////////////////////////////////////////////////////////////
+// Multiline text drawing
 void al_draw_multiline_text(const ALLEGRO_FONT *font, ALLEGRO_COLOR color
         , float x, float y, float max_width, float line_height
         , int flags, const char *text);
 
+////////////////////////////////////////////////////////////////////////////////
+// Bitmap fonts
 %rename al_grab_font_from_bitmap al__grab_font_from_bitmap;
 ALLEGRO_FONT *al_grab_font_from_bitmap(ALLEGRO_BITMAP *bmp, int ranges_n, const int ranges[]);
 

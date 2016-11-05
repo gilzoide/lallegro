@@ -1,6 +1,6 @@
 ## Lallegro Makefile ##
 
-submods = allegro font ttf image color memfile dialog physfs
+submods = allegro audio acodec font ttf image color memfile dialog physfs
 
 # Allegro stuff
 allegroIncludes = $(shell pkg-config --cflags-only-I allegro-5)
@@ -9,7 +9,7 @@ ifdef UNSTABLE
 DEFINES = -DALLEGRO_UNSTABLE
 endif
 allegroFlags = $(shell pkg-config --cflags allegro-5) $(DEFINES)
-allegroLinks = $(shell pkg-config --libs allegro-5 allegro_{image,font,ttf,color,memfile,dialog,physfs}-5)
+allegroLinks = $(shell pkg-config --libs allegro-5 allegro_{audio,acodec,image,font,ttf,color,memfile,dialog,physfs}-5)
 
 CC = gcc
 CFLAGS = -Wall -O2 -fPIC $(allegroFlags)
@@ -19,8 +19,9 @@ LINKS = $(allegroLinks)
 luaSrc = $(wildcard *.lua)
 
 # Build #
-all : $(submods:=.so) lua
+all : swig lua
 
+swig : $(submods:=.so) 
 
 # each submodule depends on it's C wrapper for Lua...
 %.so : $(buildDir)/wrap_%.o

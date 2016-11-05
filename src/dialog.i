@@ -27,9 +27,14 @@
 /* Manually included functions, as SWIG is only preprocessing
  * ALLEGRO_DIALOG_FUNC to AL_FUNC, and complaining that AL_FUNC isn't valid C
  */
+////////////////////////////////////////////////////////////////////////////////
+// Types
+typedef struct ALLEGRO_FILECHOOSER ALLEGRO_FILECHOOSER;
 
+typedef struct ALLEGRO_TEXTLOG ALLEGRO_TEXTLOG;
 
-
+////////////////////////////////////////////////////////////////////////////////
+// Native Dialogs
 bool al_init_native_dialog_addon(void);
 
 void al_shutdown_native_dialog_addon(void);
@@ -67,6 +72,9 @@ uint32_t al_get_allegro_native_dialog_version(void);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Menus
+typedef struct ALLEGRO_MENU ALLEGRO_MENU;
+
+typedef struct ALLEGRO_MENU_INFO;
 
 ALLEGRO_MENU *al_create_menu(void);
 

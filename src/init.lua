@@ -246,7 +246,9 @@ local function import_all (submod)
     end
 end
 
-import_all (require 'lallegro.image')
+import_all (require 'lallegro.audio')
+import_all (require 'lallegro.acodec')
+import_all (require 'lallegro.color')
 import_all (require 'lallegro.font')
 
 --- Wrapper for al_get_display_mode 'C array -> table' conversion
@@ -283,10 +285,10 @@ if al.UNSTABLE then
     end
 end
 
-import_all (require 'lallegro.color')
+import_all (require 'lallegro.image')
 import_all (require 'lallegro.memfile')
-import_all (require 'lallegro.physfs')
 import_all (require 'lallegro.dialog')
+import_all (require 'lallegro.physfs')
 
 --- Wrapper for al_append_native_text_log, with '%s' as format
 function al.append_native_text_log (textlog, text)
