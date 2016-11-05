@@ -1,6 +1,6 @@
 ## Lallegro Makefile ##
 
-submods = allegro image
+submods = allegro font ttf image
 
 # Allegro stuff
 allegroIncludes = $(shell pkg-config --cflags-only-I allegro-5)
@@ -9,7 +9,7 @@ ifdef UNSTABLE
 DEFINES = -DALLEGRO_UNSTABLE
 endif
 allegroFlags = $(shell pkg-config --cflags allegro-5) $(DEFINES)
-allegroLinks = $(shell pkg-config --libs allegro-5 allegro_image-5)
+allegroLinks = $(shell pkg-config --libs allegro-5 allegro_image-5 allegro_font-5 allegro_ttf-5)
 
 CC = gcc
 CFLAGS = -Wall -O2 $(allegroFlags)
@@ -27,12 +27,10 @@ all : $(submods:=.so) lua
 	$(CC) -o $(libDir)/$@ $< -fPIC -shared $(CFLAGS) $(LINKS)
 
 # ...that is generated using SWIG
+.PRECIOUS : $(buildDir)/wrap_%.c
 $(buildDir)/wrap_%.c : %.i
 	swig -I/usr/include $(DEFINES) -o $@ -lua $<
 	sed -i 's/"al_/"/' $@
-
-shared : $(wrapSrc)
-
 
 # and copy the ".lua" file(s)
 lua : $(luaSrc)

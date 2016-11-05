@@ -6,7 +6,7 @@ end
 
 
 al = require 'lallegro'
-assert (al.init ('image'))
+assert (al.init ('image', 'font', 'ttf'))
 assert (al.install ('mouse'))
 printf ('Funcionando com Allegro %d %s, num sistema com %d cpus; %d RAM; Pasta: %s'
 		, al.get_allegro_version () >> 24, al.UNSTABLE and '(UNSTABLE)' or ''
@@ -130,3 +130,10 @@ end
 local id = al.identity_transform ()
 local outra_id = al.copy_transform (id)
 print (id, outra_id)
+
+
+--- Teste de fontes
+local font = assert (al.load_font ('/usr/share/fonts/TTF/DejaVuSansMono-Bold.ttf', 20, 0), 'eita')
+print (al.get_glyph_dimensions (font, 95))
+local _, ranges = al.get_font_ranges (font, 2)
+for i, r in ipairs (ranges) do print (i, r) end

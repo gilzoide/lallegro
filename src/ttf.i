@@ -15,20 +15,37 @@
  * along with Lallegro.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** Allegro Image addon **/
-%module lallegro_image
+/** Allegro TTF addon **/
+%module lallegro_ttf
 
 %include "common.i"
 
 %{
-#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_ttf.h>
 %}
 
-/* Manually included functions, as SWIG is only preprocessing ALLEGRO_IIO_FUNC
+/* Manually included functions, as SWIG is only preprocessing ALLEGRO_TTF_FUNC
  * to AL_FUNC, and complaining that AL_FUNC isn't valid C
  */
-bool al_init_image_addon(void);
+bool al_init_ttf_addon(void);
 
-void al_shutdown_image_addon(void);
+void al_shutdown_ttf_addon(void);
 
-uint32_t al_get_allegro_image_version(void);
+ALLEGRO_FONT *al_load_ttf_font(char const *filename, int size, int flags);
+
+ALLEGRO_FONT *al_load_ttf_font_f(ALLEGRO_FILE *file, char const *filename
+        , int size, int flags);
+
+ALLEGRO_FONT *al_load_ttf_font_stretch(char const *filename, int w, int h
+        , int flags);
+
+ALLEGRO_FONT *al_load_ttf_font_stretch_f(ALLEGRO_FILE *file
+        , char const *filename, int w, int h, int flags);
+
+uint32_t al_get_allegro_ttf_version(void);
+
+#ifdef ALLEGRO_UNSTABLE
+%rename al_get_glyph al__get_glyph;
+bool al_get_glyph(const ALLEGRO_FONT *f, int prev_codepoint, int codepoint
+        , ALLEGRO_GLYPH *glyph);
+#endif

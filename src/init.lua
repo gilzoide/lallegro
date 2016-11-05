@@ -17,17 +17,16 @@
 
 --- Submodules that will compose our lallegro module
 local al = require 'lallegro.allegro'
-al.image = require 'lallegro.image'
 
 --- Initializes Allegro and whatever addon you want
 --
--- Valid addons are, for now: 'image'
+-- Valid addons are, for now: 'image', 'font', 'ttf'
 function al.init (...)
     if not al._init () then return nil, "[lallegro.init] Couldn't initialize Allegro" end
     for _, addon in ipairs { ... } do
-        local mod = al[addon]
+        local mod = al['init_' .. addon .. '_addon']
         if not mod then return nil, "[lallegro.init] Addon \"" .. addon .. "\" not supported" end
-        if not mod['init_' .. addon .. "_addon"] () then return nil, "[lallegro.init] Couldn't initialize " .. addon .. " addon" end
+        if not mod () then return nil, "[lallegro.init] Couldn't initialize " .. addon .. " addon" end
     end
     return true
 end
@@ -233,6 +232,55 @@ function al.build_camera_transform (trans
             , look_x, look_y, look_z
             , up_x, up_y, up_z)
     return trans
+end
+
+--------------------------------------------------------------------------------
+--  SUBMODULES
+--------------------------------------------------------------------------------
+
+--- Import every symbol in submodule to lallegro module.
+-- @local
+local function import_all (submod)
+    for k, v in pairs (submod) do
+        al[k] = v
+    end
+end
+
+import_all (require 'lallegro.image')
+import_all (require 'lallegro.font')
+
+--- Wrapper for al_get_display_mode 'C array -> table' conversion
+function al.get_font_ranges (f, ranges_count)
+    local arr_size = 2 * ranges_count
+    local arr = al.new_int (arr_size)
+    local ret = al._get_font_ranges (f, ranges_count, arr)
+    local ranges = {}
+    for i = 0, arr_size - 1 do
+        table.insert (ranges, al.int_getitem (arr, i))
+    end
+    al.delete_int (arr)
+    return ret, ranges
+end
+
+--- Wrapper for al_grab_font_from_bitmap with 'table -> C array' conversion
+function al.grab_font_from_bitmap (bmp, ranges)
+    local arr = al.new_int (#ranges)
+    for i, r in ipairs (ranges) do
+        al.int_setitem (arr, i - 1, r)
+    end
+    local ret = al._grab_font_from_bitmap (bmp, #ranges, arr)
+    al.delete_int (arr)
+    return ret
+end
+
+import_all (require 'lallegro.ttf')
+
+if al.UNSTABLE then
+    --- Wrapper for al_get_glyph with default 4th parameter
+    function al.get_glyph (f, prev_codepoint, codepoint, glyph)
+        glyph = glyph or al.ALLEGRO_GLYPH ()
+        return al._get_glyph (f, prev_codepoint, codepoint, glyph)
+    end
 end
 
 return al
