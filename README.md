@@ -29,9 +29,10 @@ al.destroy_display (disp)
 
 Bindings
 --------
-1 to 1 function binding is provided for stuff in `allegro.h`. Addons will
-be dealt with later. Functions are renamed so the prefix `al_` is removed, so
-the calls to functions use the Lua module as the Allegro namespace.
+1 to 1 function binding is provided to almost all the Allegro API. The
+"Primitives" addon is the only one missing, for now. Functions are renamed so
+the prefix `al_` is removed, so the calls to functions use the Lua module as
+the Allegro namespace.
 
 Differences between the Allegro C API and this one is detailed in the
 [API diff document](apidiff.md).
@@ -46,11 +47,14 @@ Focus is on the bindings for now.
 
 Building
 --------
-With [make](https://www.gnu.org/software/make/):
+With [cmake](https://cmake.org/):
 
-    $ make
+    $ mkdir build
+	$ cd build
+	$ cmake ..
+	$ make
 
-Call with `UNSTABLE=1` for compiling with [Allegro Unstable
+Call cmake with `-DALLEGRO_UNSTABLE=1` for including the [Allegro Unstable
 API](http://liballeg.org/a5docs/trunk/getting_started.html#unstable-api)
 
 
@@ -61,7 +65,8 @@ Using [LuaRocks](https://luarocks.org/)
 
     # luarocks install --server=http://luarocks.org/dev lallegro
 
-Using [make](https://www.gnu.org/software/make/) directly:
+Using [make](https://www.gnu.org/software/make/) directly (after building with
+cmake):
 
     # make install
 
@@ -71,5 +76,5 @@ Documentation
 The [Allegro Documentation](http://liballeg.org/a5docs/trunk/index.html) should
 be widly used, as _lallegro_ provides 1 to 1 bindings.
 
-[LDoc](https://github.com/stevedonovan/LDoc) will be used for documenting the
-Lua specific stuff.
+[LDoc](https://github.com/stevedonovan/LDoc) used for documenting the Lua
+specific stuff. Generate with `ldoc .`.

@@ -1,6 +1,11 @@
 C and Lua API differences
 =========================
 
+Platform Specific Functions
+---------------------------
+The platform specific functions require other headers, and other libraries to
+be really useful. Therefore, _lallegro_ doesn't bind them.
+
 Macros
 ------
 Some Allegro functionality is facilitated by preprocessor macros. _Lallegro_
@@ -37,8 +42,9 @@ while not get_out do
 end
 ```
 
-Another one is the display mode getter `al_get_display_mode`, that lets you
-choose between creating a new `ALLEGRO_DISPLAY_MODE` or reusing your own:
+The other ones, like the display mode getter `al_get_display_mode`, lets you
+choose between creating a new `ALLEGRO_DISPLAY_MODE` or reusing your own.
+These are all documented in LDoc. Example:
 
 ```lua
 -- create the ALLEGRO_DISPLAY_MODE once only
