@@ -33,8 +33,8 @@ Bindings
 be dealt with later. Functions are renamed so the prefix `al_` is removed, so
 the calls to functions use the Lua module as the Allegro namespace.
 
-Differences between the Allegro C API and this one is detailed
-[here](apidiff.md).
+Differences between the Allegro C API and this one is detailed in the
+[API diff document](apidiff.md).
 
 
 Wrappers

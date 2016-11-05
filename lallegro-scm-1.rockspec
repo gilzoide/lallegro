@@ -4,9 +4,9 @@ source = {
 	url = 'git://github.com/gilzoide/lallegro',
 }
 description = {
-	summary = 'Lua bindings for the Allegro5 game programming library',
+	summary = 'Lua bindings for the Allegro 5 game programming library',
 	detailed = [[
-		Lua bindings for the Allegro5 game programming library
+		Lua bindings for the Allegro 5 game programming library
 	]],
 	license = 'LGPLv3',
 	maintainer = 'gilzoide <gilzoide@gmail.com>'

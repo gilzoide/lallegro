@@ -51,15 +51,21 @@ end
 
 -- or maybe you just want the first one, so no need to explicitly create it
 local a_new_disp_mode = al.get_display_mode (0)
-
 ```
 
 
 Var args
 --------
 SWIG doesn't handle var args functions very well, thus the functions
-`al_fprintf`, `al_vfprintf`, `al_ustr_vappendf` are not binded. One can always
-format a string directly in Lua using `string.format`, so this ain't no trouble.
+`al_fprintf`, `al_vfprintf`, `al_ustr_vappendf` and others are not binded. One
+can always format a string directly in Lua using `string.format`, so this ain't
+no trouble.
+
+
+Callbacks
+---------
+Mapping Lua functions to C functions ain't an easy task, thus (at least for now)
+Allegro functions that expect function pointers are not bound.
 
 
 Threads
