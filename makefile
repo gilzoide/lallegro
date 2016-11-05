@@ -9,6 +9,8 @@ LIBDIR = $(PREFIX)/lib/lua/5.3/$(pkgName)
 LUADIR = $(PREFIX)/share/lua/5.3/$(pkgName)
 CONFDIR = $(PREFIX)/etc
 
+export LIBFLAG := $(LIBFLAG)
+
 
 # My stuff
 export buildDir := $(CURDIR)/build
