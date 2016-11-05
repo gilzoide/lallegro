@@ -283,4 +283,7 @@ if al.UNSTABLE then
     end
 end
 
+import_all (require 'lallegro.color')
+import_all (require 'lallegro.memfile')
+
 return al

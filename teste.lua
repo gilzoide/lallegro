@@ -137,3 +137,5 @@ local font = assert (al.load_font ('/usr/share/fonts/TTF/DejaVuSansMono-Bold.ttf
 print (al.get_glyph_dimensions (font, 95))
 local _, ranges = al.get_font_ranges (font, 2)
 for i, r in ipairs (ranges) do print (i, r) end
+
+print (al.color_rgb_to_html (1, 1, 1))

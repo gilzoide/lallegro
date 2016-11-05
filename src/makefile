@@ -1,6 +1,6 @@
 ## Lallegro Makefile ##
 
-submods = allegro font ttf image
+submods = allegro font ttf image color memfile
 
 # Allegro stuff
 allegroIncludes = $(shell pkg-config --cflags-only-I allegro-5)
@@ -9,10 +9,10 @@ ifdef UNSTABLE
 DEFINES = -DALLEGRO_UNSTABLE
 endif
 allegroFlags = $(shell pkg-config --cflags allegro-5) $(DEFINES)
-allegroLinks = $(shell pkg-config --libs allegro-5 allegro_image-5 allegro_font-5 allegro_ttf-5)
+allegroLinks = $(shell pkg-config --libs allegro-5 allegro_{image,font,ttf,color,memfile}-5)
 
 CC = gcc
-CFLAGS = -Wall -O2 $(allegroFlags)
+CFLAGS = -Wall -O2 -fPIC $(allegroFlags)
 LINKS = $(allegroLinks)
 
 # Lua stuff
@@ -23,8 +23,8 @@ all : $(submods:=.so) lua
 
 
 # each submodule depends on it's C wrapper for Lua...
-%.so : $(buildDir)/wrap_%.c
-	$(CC) -o $(libDir)/$@ $< -fPIC -shared $(CFLAGS) $(LINKS)
+%.so : $(buildDir)/wrap_%.o
+	$(CC) -o $(libDir)/$@ $< -shared $(CFLAGS) $(LINKS)
 
 # ...that is generated using SWIG
 .PRECIOUS : $(buildDir)/wrap_%.c
