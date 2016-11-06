@@ -60,12 +60,13 @@ memory operations, and should be avoided, like in event loops:
 local queue = al.create_event_queue ()
 local ev = al.ALLEGRO_EVENT ()
 while not get_out do
-    al.wait_for_event (queue, ev)
-    -- do your stuff
+    if al.get_next_event (queue, ev) then
+		-- do your stuff
+	end
 end
 ```
 
-The exceptions are when the function allows `NULL` to be passed in, like in
+The exceptions are when the functions allow `NULL` to be passed in, like in
 `al_wait_for_event*`, and `al_play_sample`.
 
 
