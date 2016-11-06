@@ -8,7 +8,7 @@ Lua bindings for the Allegro 5 game programming library, using SWIG
 not_luadoc = true
 merge = true
 
-file = { 'src/init.lua' }
+file = { 'src' }
 format = 'markdown'
 readme =  { 'README.md', 'apidiff.md' }
 
