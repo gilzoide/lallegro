@@ -69,7 +69,7 @@ void al_get_text_dimensions(const ALLEGRO_FONT *f, char const *text,
 
 uint32_t al_get_allegro_font_version(void);
 
-%rename al_get_font_ranges al__get_font_ranges;
+%rename al_get_font_ranges _get_font_ranges;
 int al_get_font_ranges(ALLEGRO_FONT *f, int ranges_count, int *ranges);
 
 void al_set_fallback_font(ALLEGRO_FONT *font, ALLEGRO_FONT *fallback);
@@ -97,8 +97,9 @@ void al_draw_multiline_text(const ALLEGRO_FONT *font, ALLEGRO_COLOR color
 
 ////////////////////////////////////////////////////////////////////////////////
 // Bitmap fonts
-%rename al_grab_font_from_bitmap al__grab_font_from_bitmap;
-ALLEGRO_FONT *al_grab_font_from_bitmap(ALLEGRO_BITMAP *bmp, int ranges_n, const int ranges[]);
+%rename al_grab_font_from_bitmap _grab_font_from_bitmap;
+ALLEGRO_FONT *al_grab_font_from_bitmap(ALLEGRO_BITMAP *bmp, int ranges_n
+        , const int *ranges);
 
 ALLEGRO_FONT *al_load_bitmap_font(const char *fname);
 

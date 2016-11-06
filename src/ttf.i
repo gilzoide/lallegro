@@ -45,7 +45,7 @@ ALLEGRO_FONT *al_load_ttf_font_stretch_f(ALLEGRO_FILE *file
 uint32_t al_get_allegro_ttf_version(void);
 
 #ifdef ALLEGRO_UNSTABLE
-%rename al_get_glyph al__get_glyph;
+%rename al_get_glyph _get_glyph;
 bool al_get_glyph(const ALLEGRO_FONT *f, int prev_codepoint, int codepoint
         , ALLEGRO_GLYPH *glyph);
 #endif

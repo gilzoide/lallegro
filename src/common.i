@@ -34,5 +34,37 @@
 %apply unsigned int { uint32_t };
 %apply long int { int64_t };
 
+// C arrays (no pointers)
+%typemap (in) float[ANY] (float temp[$1_dim0]) {
+    int i, size;
+    // assert length
+    lua_len (L, $input);
+    size = lua_tointeger (L, -1);
+    if (size != $1_dim0) {
+        luaL_error (L, "expected %d floats in table, not %d", $1_dim0, size);
+    }
+    for (i = 0; i < $1_dim0; i++) {
+        lua_geti (L, $input, i + 1);
+        temp[i] = luaL_checknumber (L, -1);
+    }
+    lua_pop (L, $1_dim0 + 1);
+    $1 = temp;
+}
+%typemap (in) int[ANY] (int temp[$1_dim0]) {
+    int i, size;
+    // assert length
+    lua_len (L, $input);
+    size = lua_tointeger (L, -1);
+    if (size != $1_dim0) {
+        luaL_error (L, "expected %d ints in table, not %d", $1_dim0, size);
+    }
+    for (i = 0; i < $1_dim0; i++) {
+        lua_geti (L, $input, i + 1);
+        temp[i] = luaL_checkinteger (L, -1);
+    }
+    lua_pop (L, $1_dim0 + 1);
+    $1 = temp;
+}
+
 // Strip the prepending "al_" from functions, so we use Lua's module as namespace
 %rename ("%(strip:[al_])s") "";

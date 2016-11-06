@@ -1,6 +1,6 @@
 lallegro
 ========
-Lua bindings for the [Allegro](http://liballeg.org/) game programming library
+Lua bindings for the [Allegro 5.2](http://liballeg.org/) game programming library
 using [SWIG](http://swig.org/). 
 
 
@@ -29,10 +29,9 @@ al.destroy_display (disp)
 
 Bindings
 --------
-1 to 1 function binding is provided to almost all the Allegro API. The
-"Primitives" addon is the only one missing, for now. Functions are renamed so
-the prefix `al_` is removed, so the calls to functions use the Lua module as
-the Allegro namespace.
+1 to 1 function binding is provided to almost all the Allegro API, including
+addons. Functions are renamed so the prefix `al_` is removed, so the calls to
+functions use the Lua module as the Allegro namespace.
 
 Differences between the Allegro C API and this one is detailed in the
 [API diff document](apidiff.md).
@@ -77,4 +76,4 @@ The [Allegro Documentation](http://liballeg.org/a5docs/trunk/index.html) should
 be widly used, as _lallegro_ provides 1 to 1 bindings.
 
 [LDoc](https://github.com/stevedonovan/LDoc) used for documenting the Lua
-specific stuff. Generate with `ldoc .`.
+specific stuff. Generate with `ldoc .`

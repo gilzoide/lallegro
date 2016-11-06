@@ -26,9 +26,11 @@ local al = require 'lallegro.core'
 --- Initializes Allegro and whatever addon you want
 --
 -- Valid addons are, for now: 'audio', 'acodec', 'font', 'ttf', 'image',
---  'native_dialog', 'video'
+--  'native_dialog', 'primitives', 'video'
 function al.init (...)
-    if not al._init () then return nil, "[lallegro.init] Couldn't initialize Allegro" end
+    if not al.install_system (al.ALLEGRO_VERSION_INT, nil) then
+		return nil, "[lallegro.init] Couldn't initialize Allegro"
+	end
     for _, addon in ipairs { ... } do
         local mod = al['init_' .. addon .. '_addon']
         if not mod then return nil, "[lallegro.init] Addon \"" .. addon .. "\" not supported" end
@@ -40,7 +42,7 @@ end
 --- Shutdowns whatever addon you want
 --
 -- Valid addons are, for now: 'audio', 'acodec', 'font', 'ttf', 'image',
---  'native_dialog', 'video'
+--  'native_dialog', 'primitives', 'video'
 function al.shutdown (...)
     for _, addon in ipairs { ... } do
         local mod = al['shutdown_' .. addon .. '_addon']
@@ -82,7 +84,7 @@ function al.get_display_mode (index, mode)
 end
 
 -- Unstable API with default output parameters
-if al.UNSTABLE then
+if al.ALLEGRO_UNSTABLE then
     --- Wrapper for `al_upload_haptic_effect` with default 3rd parameter
     function al.upload_haptic_effect (hap, effect, id)
         id = id or al.ALLEGRO_HAPTIC_EFFECT_ID ()
@@ -268,6 +270,13 @@ local function import_all (submod)
 end
 
 import_all (require 'lallegro.audio')
+
+--- Wrapper for `al_play_sample` with default 6th parameter
+function al.play_sample (spl, gain, pan, speed, loop, ret_id)
+    ret_id = ret_id or al.ALLEGRO_SAMPLE_ID ()
+    return al._play_sample (spl, gain, pan, speed, loop, ret_id), ret_id
+end
+
 import_all (require 'lallegro.acodec')
 import_all (require 'lallegro.color')
 import_all (require 'lallegro.font')
@@ -298,7 +307,7 @@ end
 
 import_all (require 'lallegro.ttf')
 
-if al.UNSTABLE then
+if al.ALLEGRO_UNSTABLE then
     --- Wrapper for `al_get_glyph` with default 4th parameter
     function al.get_glyph (f, prev_codepoint, codepoint, glyph)
         glyph = glyph or al.ALLEGRO_GLYPH ()
@@ -315,10 +324,124 @@ import_all (require 'lallegro.dialog')
 -- Calls `al_append_native_text_log (textlog, "%s", text)`.
 -- Format `text` in Lua, and you're good to go
 function al.append_native_text_log (textlog, text)
+    assert (type (text) == 'string', "[lallegro.append_native_text_log] Only strings are supported")
     al._append_native_text_log (textlog, '%s', text)
 end
 
 import_all (require 'lallegro.physfs')
+import_all (require 'lallegro.primitives')
+
+--- Default stride: 2 floats
+al.default_stride = 2 * al.float_size
+
+--- Wrapper for `al_calculate_arc` with 'C array -> table' conversion
+function al.calculate_arc (stride, cx, cy, rx, ry, start_theta, delta_theta,
+        thickness, num_points)
+    local arr_size = 2 * num_points
+    local arr = al.new_float (arr_size)
+    al._calculate_arc (arr, stride, cx, cy, rx, ry, start_theta, delta_theta,
+            thickness, num_points)
+    local ret = {}
+    for i = 0, arr_size - 1 do
+        table.insert (ret, al.float_getitem (arr, i))
+    end
+    al.delete_float (arr)
+    return ret
+end
+
+--- Wrapper for `al_calculate_spline` with 'C array -> table' conversion
+function al.calculate_spline (stride, points, thickness, num_points)
+    local arr_size = thickness <= 0 and num_points or 2 * num_points
+    local arr = al.new_float (arr_size)
+    al._calculate_spline (arr, stride, points, thickness, num_points)
+    local ret = {}
+    for i = 0, arr_size - 1 do
+        table.insert (ret, al.float_getitem (arr, i))
+    end
+    al.delete_float (arr)
+    return ret
+end
+
+--- Wrapper for `al_calculate_ribbon` with 'C array -> table' conversion
+function al.calculate_ribbon (dest_stride, points, points_stride, thickness)
+    local num_segments = #points
+    local arr_size = thickness <= 0 and num_segments or 2 * num_segments
+    local arr = al.new_float (arr_size)
+    local arr_points = al.new_float (num_segments)
+    for i = 0, num_segments - 1 do
+        al.float_setitem (arr_points, i, points[i + 1])
+    end
+    al._calculate_ribbon (arr, dest_stride, arr_points, points_stride
+            , thickness, num_segments)
+    al.delete_float (arr_points)
+    local ret = {}
+    for i = 0, arr_size - 1 do
+        table.insert (ret, al.float_getitem (arr, i))
+    end
+    al.delete_float (arr)
+    return ret
+end
+
+--- Wrapper for `al_draw_ribbon` with 'C array -> table' conversion
+function al.draw_ribbon (points, points_stride, color, thickness)
+    local arr = al.new_float (#points)
+    for i, x in ipairs (points) do
+        al.float_setitem (arr, i - 1, x)
+    end
+    al._draw_ribbon (arr, points_stride, color, thickness, #points / 2)
+    al.delete_float (arr)
+end
+
+--- Wrapper for `al_draw_polyline` with 'C array -> table' conversion
+function al.draw_polyline (vertices, vertex_stride, join_style, cap_style, color
+		, thickness, miter_limit)
+	local arr_size = #vertices
+	local arr = al.new_float (arr_size)
+	for i, x in ipairs (vertices) do
+		al.float_setitem (arr, i - 1, x)
+	end
+	al._draw_polyline (arr, vertex_stride, arr_size, join_style, cap_style
+			, color, thickness, miter_limit)
+	al.delete_float (arr)
+end
+
+--- Wrapper for `al_draw_polygon` with 'C array -> table' conversion
+function al.draw_polygon (vertices, join_style, color
+		, thickness, miter_limit)
+	local arr = al.new_float (#vertices)
+	for i, x in ipairs (vertices) do
+		al.float_setitem (arr, i - 1, x)
+	end
+	al._draw_polygon (arr, #vertices / 2, join_style, color, thickness
+			, miter_limit)
+	al.delete_float (arr)
+end
+
+--- Wrapper for `al_draw_filled_polygon` with 'C array -> table' conversion
+function al.draw_filled_polygon (vertices, color)
+	local arr = al.new_float (#vertices)
+	for i, x in ipairs (vertices) do
+		al.float_setitem (arr, i - 1, x)
+	end
+	al._draw_filled_polygon (arr, #vertices / 2, color)
+	al.delete_float (arr)
+end
+
+--- Wrapper for `al_draw_filled_polygon_with_holes` with 'C array -> table' conversion
+function al.draw_filled_polygon_with_holes (vertices, vertex_counts, color)
+	local arr = al.new_float (#vertices)
+	for i, x in ipairs (vertices) do
+		al.float_setitem (arr, i - 1, x)
+	end
+	local arr_counts = al.new_int (#vertex_counts)
+	for i, x in ipairs (vertex_counts) do
+		al.int_setitem (arr_counts, i - 1, x)
+	end
+	al._draw_filled_polygon_with_holes (arr, arr_counts, color)
+	al.delete_float (arr)
+	al.delete_int (arr_counts)
+end
+
 import_all (require 'lallegro.video')
 
 return al

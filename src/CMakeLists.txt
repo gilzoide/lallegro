@@ -27,6 +27,7 @@ swig_please_wrap_it (image)
 swig_please_wrap_it (memfile)
 swig_please_wrap_it (dialog)
 swig_please_wrap_it (physfs)
+swig_please_wrap_it (primitives)
 swig_please_wrap_it (video)
 
 # Copy Lua files
@@ -35,7 +36,8 @@ file (COPY ${luaSrc} DESTINATION ${CMAKE_PROJECT_NAME})
 
 ##  Install  ##
 set (LUA_VER "${LUA_VERSION_MAJOR}.${LUA_VERSION_MINOR}")
-install (TARGETS core audio acodec color font ttf image memfile dialog physfs video
+install (TARGETS core audio acodec color font ttf image memfile dialog physfs
+	primitives video
 	LIBRARY DESTINATION lib/lua/${LUA_VER}/${CMAKE_PROJECT_NAME})
 install (FILES ${luaSrc}
 	DESTINATION share/lua/${LUA_VER}/${CMAKE_PROJECT_NAME})

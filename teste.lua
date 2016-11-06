@@ -2,13 +2,7 @@
 
 
 al = require 'lallegro'
-assert (al.init ('image', 'font', 'ttf', 'native_dialog'))
-local log = al.open_native_text_log ('LOG', al.ALLEGRO_TEXTLOG_MONOSPACE)
-print = function (what)
-	al.append_native_text_log (log, tostring (what) .. '\n')
-end
-
-
+assert (al.init ('image', 'font', 'ttf', 'native_dialog', 'primitives'))
 assert (al.install ('mouse'))
 
 local function printf (fmt, ...)
@@ -16,25 +10,25 @@ local function printf (fmt, ...)
 end
 printf ('Funcionando com Allegro %d %s, num sistema com %d cpus; %d RAM; Pasta: %s'
 		, al.get_allegro_version () >> 24, al.UNSTABLE and '(UNSTABLE)' or ''
-        , al.get_cpu_count (), al.get_ram_size ()
-        , al.get_current_directory ())
+		, al.get_cpu_count (), al.get_ram_size ()
+		, al.get_current_directory ())
 al.set_app_name 'lallegro teste'
 
 -- Monitores
 local vid_adap = al.ALLEGRO_MONITOR_INFO ()
 print ('Monitores disponíveis:')
 for i = 0, al.get_num_video_adapters () - 1 do
-    al.get_monitor_info (i, vid_adap)
-    printf ('  %d - (%d, %d) até (%d, %d)', i, vid_adap.x1, vid_adap.y1
-            , vid_adap.x2, vid_adap.y2)
+	al.get_monitor_info (i, vid_adap)
+	printf ('  %d - (%d, %d) até (%d, %d)', i, vid_adap.x1, vid_adap.y1
+			, vid_adap.x2, vid_adap.y2)
 end
 -- Modos de display
 local disp_data = al.ALLEGRO_DISPLAY_MODE ()
 print ('Modos de display disponíveis:')
 for i = 0, al.get_num_display_modes () - 1 do
-    al.get_display_mode (i, disp_data)
-    printf ('  %d - %dx%d, formato: %d, refresh: %d', i, disp_data.width
-            , disp_data.height, disp_data.format, disp_data.refresh_rate)
+	al.get_display_mode (i, disp_data)
+	printf ('  %d - %dx%d, formato: %d, refresh: %d', i, disp_data.width
+			, disp_data.height, disp_data.format, disp_data.refresh_rate)
 end
 
 
@@ -42,8 +36,9 @@ al.get_display_mode (0, disp_data)
 al.set_new_display_flags (al.ALLEGRO_PROGRAMMABLE_PIPELINE)
 local display = assert (al.create_display (disp_data.width, disp_data.height))
 printf ('Criando janela %dx%d na posição %dx%d', disp_data.width, disp_data.height
-        , al.get_window_position (display))
+		, al.get_window_position (display))
 local preto = al.map_rgb (0, 0, 0)
+local branco = al.map_rgb (255, 255, 255)
 printf ('Limpando tela de preto, que é (%d, %d, %d, %d)', al.unmap_rgba (preto))
 
 -- Teste do mouse
@@ -51,33 +46,13 @@ printf ('Mouse na posição (%d, %d)', select (2, al.get_mouse_cursor_position (
 
 
 -- Teste dos shaders
-local sh = al.create_shader (al.ALLEGRO_SHADER_AUTO)
-if not al.attach_shader_source (sh, al.ALLEGRO_PIXEL_SHADER, [[
-#version 130
-
-uniform sampler2D al_tex;
-varying vec4 varying_color;
-varying vec2 varying_texcoord;
-
-void main () {
-    gl_FragColor = vec4 (texture (al_tex, varying_texcoord).xyz, 0.41);
-}
-]]) or not al.attach_shader_source (sh, al.ALLEGRO_VERTEX_SHADER, al.get_default_shader_source (al.ALLEGRO_SHADER_GLSL, al.ALLEGRO_VERTEX_SHADER)) then
-    print (al.get_shader_log (sh))
-    return
-end
--- print ('\n', al.get_default_shader_source (al.ALLEGRO_SHADER_GLSL, al.ALLEGRO_VERTEX_SHADER), '\n')
--- print ('\n', al.get_default_shader_source (al.ALLEGRO_SHADER_GLSL, al.ALLEGRO_PIXEL_SHADER), '\n')
-assert (al.build_shader (sh), 'Deu bosta no build_shader =/')
 al.set_blender (al.ALLEGRO_ADD, al.ALLEGRO_ALPHA, al.ALLEGRO_INVERSE_ALPHA)
-al.set_shader_float_vector ('teste', 1, { 1, 1, 0, 1 })
-al.set_shader_int_vector ('testei', 1, { 2, 4, 0 })
-al.use_shader (sh)
 
-local bmp = al.load_bitmap ('../flango.png')
+local bmp = al.load_bitmap ('flango.png')
 al.set_target_backbuffer (display)
 al.clear_to_color (preto)
 al.draw_bitmap (bmp, 0, 0, 0)
+al.draw_filled_polygon_with_holes ({ 0, 0, 0, 100, 100, 100, 100, 0, 10, 10, 90, 10, 90, 90 }, { 4, 3, 0 }, branco)
 al.flip_display ()
 
 -- Teste dos eventos
@@ -87,7 +62,7 @@ al.register_event_source (queue, al.get_mouse_event_source ())
 print ('Táca-le X (botão de fechar mesmo) pra fechar a janela')
 local ev = al.ALLEGRO_EVENT ()
 while true do
-    if al.get_next_event (queue, ev) then
+	if al.get_next_event (queue, ev) then
 		if ev.type == al.ALLEGRO_EVENT_DISPLAY_CLOSE then
 			break
 		elseif ev.type == al.ALLEGRO_EVENT_MOUSE_BUTTON_DOWN then
@@ -97,27 +72,29 @@ while true do
 end
 al.destroy_display (display)
 al.destroy_event_queue (queue)
+al.destroy_bitmap (bmp)
+al.destroy_shader (sh)
 
 
 --- Teste do arquivo de config
-cfg = al.load_config_file '../configTest.cfg'
+local cfg = al.load_config_file 'configTest.cfg'
 sec, it = al.get_first_config_section (cfg)
 repeat
-	print (sec)
-	entry, it2 = al.get_first_config_entry (cfg, sec)
-	repeat
-		print ('', entry, '=', al.get_config_value (cfg, sec, entry))
-		entry, it2 = al.get_next_config_entry (it2)
-	until not it2
-	sec, it = al.get_next_config_section (it)
+    print (sec)
+    entry, it2 = al.get_first_config_entry (cfg, sec)
+    repeat
+        print ('', entry, '=', al.get_config_value (cfg, sec, entry))
+        entry, it2 = al.get_next_config_entry (it2)
+    until not it2
+    sec, it = al.get_next_config_section (it)
 until not it
 
 al.destroy_config (cfg)
 
 
 --- Teste do haptic
-if al.UNSTABLE then
-	al.install ('joystick', 'haptic')
+if al.ALLEGRO_UNSTABLE then
+    al.install ('joystick', 'haptic')
     local num_joys = al.get_num_joysticks ()
     printf ('Joystick instalado, %d disponíveis', num_joys)
     if num_joys > 0 then
@@ -143,7 +120,7 @@ local font = assert (al.load_font ('/usr/share/fonts/TTF/DejaVuSansMono-Bold.ttf
 print (al.get_glyph_dimensions (font, 95))
 local _, ranges = al.get_font_ranges (font, 2)
 for i, r in ipairs (ranges) do print (i, r) end
+al.destroy_font (font)
 
 print (al.color_rgb_to_html (1, 1, 1))
-
-al.show_native_message_box (nil, 'Título', 'Tiau', 'Já vai?', 'falooooooows', al.ALLEGRO_MESSAGEBOX_WARN)
+al.uninstall_system ()

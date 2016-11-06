@@ -102,7 +102,7 @@ ALLEGRO_SAMPLE *al_create_sample(void *buf, unsigned int samples
 
 void al_destroy_sample(ALLEGRO_SAMPLE *spl);
 
-%apply ALLEGRO_SAMPLE_ID *OUTPUT { ALLEGRO_SAMPLE_ID *ret_id };
+%rename al_play_sample _play_sample;
 bool al_play_sample(ALLEGRO_SAMPLE *spl, float gain, float pan, float speed
 		, ALLEGRO_PLAYMODE loop, ALLEGRO_SAMPLE_ID *ret_id);
 

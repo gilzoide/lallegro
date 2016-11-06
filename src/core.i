@@ -30,7 +30,7 @@
 %include <allegro5/base.h>
 
 // Time: OUTPUT
-%rename al_init_timeout al__init_timeout;
+%rename al_init_timeout _init_timeout;
 %include <allegro5/altime.h>
 // Bitmap: OUTPUT
 %apply int *OUTPUT { int *x, int *y, int *w, int *h };
@@ -76,18 +76,18 @@
 %newobject al_get_current_directory;
 %include <allegro5/fshook.h>
 // Fullscreen modes: OUTPUT on Lua
-%rename al_get_display_mode al__get_display_mode;
+%rename al_get_display_mode _get_display_mode;
 %include <allegro5/fullscreen_mode.h>
 // Haptic: OUTPUT on Lua
-%rename al_upload_haptic_effect al__upload_haptic_effect;
-%rename al_upload_and_play_haptic_effect al__upload_and_play_haptic_effect;
-%rename al_rumble_haptic al__rumble_haptic;
+%rename al_upload_haptic_effect _upload_haptic_effect;
+%rename al_upload_and_play_haptic_effect _upload_and_play_haptic_effect;
+%rename al_rumble_haptic _rumble_haptic;
 %include <allegro5/haptic.h>
 // Joystick: OUTPUT on Lua
-%rename al_get_joystick_state al__get_joystick_state;
+%rename al_get_joystick_state _get_joystick_state;
 %include <allegro5/joystick.h>
 // Keyboard: OUTPUT on Lua
-%rename al_get_keyboard_state al__get_keyboard_state;
+%rename al_get_keyboard_state _get_keyboard_state;
 %include <allegro5/keyboard.h>
 /* Memory: macros
  * I don't think Lua devs will be `malloc`ing stuff, but who knows
@@ -99,16 +99,16 @@
 %ignore al_calloc;
 %include <allegro5/memory.h>
 // Monitor: OUTPUT on Lua
-%rename al_get_monitor_info al__get_monitor_info;
+%rename al_get_monitor_info _get_monitor_info;
 %include <allegro5/monitor.h>
 // Mouse: OUTPUT on Lua, OUTPUT
-%rename al_get_mouse_state al__get_mouse_state;
+%rename al_get_mouse_state _get_mouse_state;
 %apply int *OUTPUT { int *ret_x, int *ret_y };
 %include <allegro5/mouse.h>
 //
 %include <allegro5/mouse_cursor.h>
 // Path: default argument
-%rename al_path_cstr al__path_cstr;
+%rename al_path_cstr _path_cstr;
 %include <allegro5/path.h>
 //
 %include <allegro5/render_state.h>
@@ -128,16 +128,16 @@
 %apply int *OUTPUT {
     int *op, int *src, int *dst, int *alpha_op, int *alpha_src, int *alpha_dst
 }
-%rename al_store_state al__store_state;
+%rename al_store_state _store_state;
 %include <allegro5/tls.h>
 // Touch Input: OUTPUT on Lua
-%rename al_get_touch_input_state al__get_touch_input_state;
+%rename al_get_touch_input_state _get_touch_input_state;
 %include <allegro5/touch_input.h>
 // Transformations: OUTPUT on Lua, INOUT
-%rename al_copy_transform al__copy_transform;
-%rename al_identity_transform al__identity_transform;
-%rename al_build_transform al__build_transform;
-%rename al_build_camera_transform al__build_camera_transform;
+%rename al_copy_transform _copy_transform;
+%rename al_identity_transform _identity_transform;
+%rename al_build_transform _build_transform;
+%rename al_build_camera_transform _build_camera_transform;
 %apply float *INOUT { float *x, float *y, float *z };
 %include <allegro5/transformations.h>
 /* UTF-8: Lua 5.3 gives us basic UTF-8 encoding, and Allegro API doesn't really
@@ -155,5 +155,6 @@ int my_init (lua_State *L) {
 %}
 
 #ifdef ALLEGRO_UNSTABLE
-%constant bool UNSTABLE = true;
+#undef ALLEGRO_UNSTABLE
+%constant bool ALLEGRO_UNSTABLE = true;
 #endif

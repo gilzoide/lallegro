@@ -62,7 +62,7 @@ void al_close_native_text_log(ALLEGRO_TEXTLOG *textlog);
 // This function originally have varargs, but SWIG doesn't like them much.
 // Format your string before passing it here, and it's all ok. We assume it'll
 // be called from the wrapper, with format as "%s", and the string
-%rename al_append_native_text_log al__append_native_text_log;
+%rename al_append_native_text_log _append_native_text_log;
 void al_append_native_text_log(ALLEGRO_TEXTLOG *textlog, char const *format
         , char const *text);
 
