@@ -3,10 +3,10 @@ C and Lua API differences
 
 al\_init
 --------
-When exiting without calling `al_uninstall_system`, a segfault occurs when
-initializing with the `al_init` macro. `lallegro.init` calls `al_install_system`
-with a nil atexit\_ptr, to avoid this. The macro is still available as
-`lallegro._init`
+When exiting without calling `al_uninstall_system`, a segfault occurs (at least
+on Linux) when initializing with the `al_init` macro. `lallegro.init` calls
+`al_install_system` with a nil atexit\_ptr, to avoid this. The macro is still
+available as `lallegro._init`
 
 Platform Specific Functions
 ---------------------------

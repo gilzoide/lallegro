@@ -7,7 +7,7 @@ using [SWIG](http://swig.org/).
 Dependencies
 ------------
 - [lua](http://www.lua.org/) >= 5.2
-- [Allegro](http://liballeg.org/) >= 5.0
+- [Allegro](http://liballeg.org/) >= 5.2
 - [SWIG](http://swig.org/) (for building)
 
 
