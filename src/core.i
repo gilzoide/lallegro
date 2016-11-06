@@ -62,6 +62,9 @@
 //
 %include <allegro5/drawing.h>
 %include <allegro5/error.h>
+// Events: OUTPUT on Lua
+%rename al_get_next_event _get_next_event;
+%rename al_peek_next_event _peek_next_event;
 %include <allegro5/events.h>
 // File: buffer initialization, make_temp_file multi return
 %include "file.i"

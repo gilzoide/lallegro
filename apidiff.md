@@ -36,22 +36,9 @@ _lallegro_ uses Lua's multiple results to return them:
 
     x, y = al.get_window_position (display)
 
-Some important exceptions are the event getters `al_get_next_event`,
-`al_peek_next_event`, `al_wait_for_event*`, that makes you explicitly pass an
-`ALLEGRO_EVENT` to avoid desnecessary memory allocation:
-
-```lua
-local queue = al.create_event_queue ()
-local ev = al.ALLEGRO_EVENT ()
-while not get_out do
-    al.wait_for_event (queue, ev)
-    -- do your stuff
-end
-```
-
-The other ones, like the display mode getter `al_get_display_mode`, lets you
-choose between creating a new `ALLEGRO_DISPLAY_MODE` or reusing your own.
-These are all documented in LDoc. Example:
+If the output is a struct, you can pass in a struct to be filled, or let
+_lallegro_ create one for you by passing `nil`. These are all documented in
+LDoc. Example:
 
 ```lua
 -- create the ALLEGRO_DISPLAY_MODE once only
@@ -65,6 +52,22 @@ end
 -- or maybe you just want the first one, so no need to explicitly create it
 local a_new_disp_mode = al.get_display_mode (0)
 ```
+
+Note that sometimes creating new objects everytime can take to a huge amount of
+memory operations, and should be avoided, like in event loops:
+
+```lua
+local queue = al.create_event_queue ()
+local ev = al.ALLEGRO_EVENT ()
+while not get_out do
+    al.wait_for_event (queue, ev)
+    -- do your stuff
+end
+```
+
+The exceptions are when the function allows `NULL` to be passed in, like in
+`al_wait_for_event*`, and `al_play_sample`.
+
 
 
 Var args

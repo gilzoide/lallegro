@@ -83,6 +83,18 @@ function al.get_display_mode (index, mode)
     return al._get_display_mode (index, mode or al.ALLEGRO_DISPLAY_MODE ())
 end
 
+--- Wrapper for `al_get_next_event` with default 2nd parameter
+function al.get_next_event (queue, ret_event)
+	ret_event = ret_event or al.ALLEGRO_EVENT ()
+	return al._get_next_event (queue, ret_event), ret_event
+end
+
+--- Wrapper for `al_peek_next_event` with default 2nd parameter
+function al.peek_next_event (queue, ret_event)
+	ret_event = ret_event or al.ALLEGRO_EVENT ()
+	return al._peek_next_event (queue, ret_event), ret_event
+end
+
 -- Unstable API with default output parameters
 if al.ALLEGRO_UNSTABLE then
     --- Wrapper for `al_upload_haptic_effect` with default 3rd parameter
@@ -270,13 +282,6 @@ local function import_all (submod)
 end
 
 import_all (require 'lallegro.audio')
-
---- Wrapper for `al_play_sample` with default 6th parameter
-function al.play_sample (spl, gain, pan, speed, loop, ret_id)
-    ret_id = ret_id or al.ALLEGRO_SAMPLE_ID ()
-    return al._play_sample (spl, gain, pan, speed, loop, ret_id), ret_id
-end
-
 import_all (require 'lallegro.acodec')
 import_all (require 'lallegro.color')
 import_all (require 'lallegro.font')

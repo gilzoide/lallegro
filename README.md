@@ -33,15 +33,11 @@ Bindings
 addons. Functions are renamed so the prefix `al_` is removed, so the calls to
 functions use the Lua module as the Allegro namespace.
 
+A more Lua-style API is to be created as well, with auto destroyed objects,
+metatables/metamethods, functional stuff, etc... And it'll all be documented!
+
 Differences between the Allegro C API and this one is detailed in the
 [API diff document](apidiff.md).
-
-
-Wrappers
---------
-Wrappers will be added someday to provide a more Lua style of programming, with
-auto destroyed objects, metatables/metamethods, functional stuff, etc...
-Focus is on the bindings for now.
 
 
 Building
