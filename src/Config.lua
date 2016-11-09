@@ -16,14 +16,20 @@
 --]]
 
 --- @classmod lallegro.Config
--- ALLEGRO_CONFIG wrapper metatable, a GC enabled and iterable object. One can
--- use sandboxed Lua files as config, but this might be useful for some.
+-- ALLEGRO_CONFIG wrapper metatable, a GC enabled object, with nice methods and
+-- iterators. One can use sandboxed Lua files as config, but this might be
+-- useful for some.
 
 local al = require 'lallegro.core'
 
 local Config = {}
 -- Let Config objects call the methods
 Config.__index = Config
+
+--------------------------------------------------------------------------------
+--  Interface functions
+--  @section wrapper
+--------------------------------------------------------------------------------
 
 --- Garbage collector should destroy the wrapped ALLEGRO_CONFIG.
 --
@@ -32,6 +38,30 @@ Config.__index = Config
 function Config:__gc ()
 	al.destroy_config (self.data)
 end
+
+--- Wraps a ALLEGRO_CONFIG on a Config object
+--
+-- @param al_cfg ALLEGRO_CONFIG to be wrapped
+--
+-- @return Config object
+function Config.wrap (al_cfg)
+	return al_cfg and setmetatable ({ data = al_cfg }, Config)
+end
+
+--- Extracts the wrapped ALLEGRO_CONFIG, so that it will not be GCed.
+--
+-- This sets the inner ALLEGRO_CONFIG pointer as `NULL`, so it is not safe to
+-- call any other methods after that.
+function Config:extract ()
+	local al_cfg = self.data
+	self.data = nil
+	return al_cfg
+end
+
+--------------------------------------------------------------------------------
+--  Getters
+--  @section getters
+--------------------------------------------------------------------------------
 
 --- Get a configuration value.
 --
@@ -45,6 +75,11 @@ end
 function Config:get (section, key)
 	return al.get_config_value (self.data, section, key)
 end
+
+--- Get the configuration as a Lua table
+--
+-- The global section is stored at index "global"
+-- TODO
 
 --------------------------------------------------------------------------------
 --  Editing
@@ -111,18 +146,15 @@ function Config:merge (other)
 	return Config.wrap (al.merge_config (self.data, other.data))
 end
 
---- Merge this configuration into `other` one.
---
--- Note that in Allegro, the second argument is merged into the first one, but
--- here it is the opposite.
+--- Merge `add` configuration into this one.
 --
 -- This is a wrapper for `al_merge_config_into`
 --
--- @usage add:merge_into (master)
+-- @usage master:merge_into (add)
 --
--- @tparam Config other Configuration to merge into
-function Config:merge_into (other)
-	al.merge_config_into (other.data, self.data)
+-- @tparam Config add Configuration to merge into
+function Config:merge_into (add)
+	al.merge_config_into (self.data, add.data)
 end
 
 --- Alias for `merge`, so you can merge Configs with Lua's `..`  operator
@@ -186,30 +218,6 @@ end
 -- end
 function Config:iterate ()
 	return coroutine.wrap (the_iterator), self
-end
-
---------------------------------------------------------------------------------
---  Interface functions
---  @section wrapper
---------------------------------------------------------------------------------
-
---- Wraps a ALLEGRO_CONFIG on a Config object
---
--- @param al_cfg ALLEGRO_CONFIG to be wrapped
---
--- @return Config object
-function Config.wrap (al_cfg)
-	return al_cfg and setmetatable ({ data = al_cfg }, Config)
-end
-
---- Extracts the wrapped ALLEGRO_CONFIG, so that it will not be GCed.
---
--- This sets the inner ALLEGRO_CONFIG pointer as `NULL`, so it is not safe to
--- call any other methods after that.
-function Config:extract ()
-	local al_cfg = self.data
-	self.data = nil
-	return al_cfg
 end
 
 --------------------------------------------------------------------------------

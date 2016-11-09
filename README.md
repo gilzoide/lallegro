@@ -17,7 +17,7 @@ Require, use, have fun!
 
 ```lua
 local al = require 'lallegro'
-assert (al.init (), 'Failed to initialize Allegro =/')
+assert (al.init ())
 
 local disp = al.create_display (800, 600)
 al.clear_to_color (al.map_rgb (0, 0, 0))

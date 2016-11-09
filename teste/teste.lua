@@ -23,16 +23,14 @@ for i = 0, al.get_num_video_adapters () - 1 do
 			, vid_adap.x2, vid_adap.y2)
 end
 -- Modos de display
-local disp_data = al.ALLEGRO_DISPLAY_MODE ()
 print ('Modos de display disponíveis:')
-for i = 0, al.get_num_display_modes () - 1 do
-	al.get_display_mode (i, disp_data)
-	printf ('  %d - %dx%d, formato: %d, refresh: %d', i, disp_data.width
-			, disp_data.height, disp_data.format, disp_data.refresh_rate)
+for i, width, height, format, refresh_rate in al.Fullscreen.modes () do
+	printf ('  %d - %dx%d, formato: %d, refresh: %d', i, width
+			, height, format, refresh_rate)
 end
 
 
-al.get_display_mode (0, disp_data)
+local disp_data = al.get_display_mode (0)
 al.set_new_display_flags (al.ALLEGRO_PROGRAMMABLE_PIPELINE)
 local display = assert (al.create_display (disp_data.width, disp_data.height))
 printf ('Criando janela %dx%d na posição %dx%d', disp_data.width, disp_data.height
@@ -51,7 +49,10 @@ al.set_blender (al.ALLEGRO_ADD, al.ALLEGRO_ALPHA, al.ALLEGRO_INVERSE_ALPHA)
 local bmp = al.load_bitmap ('flango.png')
 al.set_target_backbuffer (display)
 al.clear_to_color (preto)
+-- Teste de trasnform
+al.use_transform (al.build_transform (100, 100, 1, 1, -al.ALLEGRO_PI / 2))
 al.draw_bitmap (bmp, 0, 0, 0)
+
 al.draw_filled_polygon_with_holes ({ 0, 0, 0, 100, 100, 100, 100, 0, 10, 10, 90, 10, 90, 90 }, { 4, 3, 0 }, branco)
 al.flip_display ()
 
@@ -107,12 +108,6 @@ if al.ALLEGRO_UNSTABLE then
         print "Conecte o controle pra vibrar xD"
     end
 end
-
-
---- Teste de transforms
-local id = al.identity_transform ()
-local outra_id = al.copy_transform (id)
-print (id, outra_id)
 
 
 --- Teste de fontes

@@ -55,6 +55,7 @@ fail:
 %}
 
 ALLEGRO_FILE *al_make_temp_file (const char *template, ALLEGRO_PATH **OUTPUT);
+%constant int EOF = EOF;
 
 %ignore al_fgets;
 %ignore al_make_temp_file;

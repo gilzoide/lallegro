@@ -21,7 +21,7 @@ print ('------------')
 local other = al.Config.new ()
 other:set ('other', 'Adicao', '++')
 
-other:merge_into (cfg)
+cfg:merge_into (other)
 
 for sec, k, v in cfg:iterate () do
 	print (sec, k, v)

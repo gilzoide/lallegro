@@ -161,3 +161,20 @@ int my_init (lua_State *L) {
 #undef ALLEGRO_UNSTABLE
 %constant bool ALLEGRO_UNSTABLE = true;
 #endif
+
+
+// Platform we're running
+#ifdef ALLEGRO_WINDOWS
+#undef ALLEGRO_WINDOWS
+%constant bool ALLEGRO_WINDOWS = true;
+#endif
+
+#ifdef ALLEGRO_UNIX
+#undef ALLEGRO_UNIX
+%constant bool ALLEGRO_UNIX = true;
+#endif
+
+#ifdef ALLEGRO_MACOSX
+#undef ALLEGRO_MACOSX
+%constant bool ALLEGRO_MACOSX = true;
+#endif
