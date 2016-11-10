@@ -449,10 +449,4 @@ end
 
 import_all (require 'lallegro.video')
 
---------------------------------------------------------------------------------
---  Lua specific API
---------------------------------------------------------------------------------
-al.Config = require 'lallegro.Config'
-al.Fullscreen = require 'lallegro.Fullscreen'
-
 return al
