@@ -38,7 +38,7 @@ end
 
 --- Wraps a ALLEGRO_FS_ENTRY on a FSEntry object
 --
--- @param al_file ALLEGRO_FS_ENTRY to be wrapped
+-- @param al_fs_entry ALLEGRO_FS_ENTRY to be wrapped
 --
 -- @return File object
 function FSEntry.wrap (al_fs_entry)

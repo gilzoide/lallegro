@@ -1,5 +1,8 @@
 local al = require 'lallegro'
+al.Config = require 'lallegro.Config'
+
 al.init ()
+
 
 local cfg = assert (al.Config.load ('configTest.cfg'))
 for sec in cfg:sections () do
@@ -25,6 +28,19 @@ cfg:merge_into (other)
 
 for sec, k, v in cfg:iterate () do
 	print (sec, k, v)
+end
+
+print ('------------')
+
+local t = cfg:get_table ()
+for k, v in pairs (t) do
+	if type (v) ~= 'table' then
+		print (k, '=', v)
+	else
+		for kk, vv in pairs (v) do
+			print (k, '.', kk, '=', vv)
+		end
+	end
 end
 
 al.uninstall_system ()

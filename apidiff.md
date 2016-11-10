@@ -10,15 +10,19 @@ available as `lallegro._init`
 
 Platform Specific Functions
 ---------------------------
-The platform specific functions require other headers, and other libraries to
-be really useful. Therefore, _lallegro_ doesn't bind them.
+The platform specific (Windows, Linux, MacOSX, Android, iOS) functions require
+other headers, and other libraries to be really useful. Therefore, _lallegro_
+doesn't bind them.
+
+OpenGL/Direct3D bindings, on the other side, can actually be used (specially
+OpenGL extensions), so these are included in _lallegro_.
 
 Macros
 ------
 Some Allegro functionality is facilitated by preprocessor macros. _Lallegro_
 implements them as functions, always using lower case. Macros implemented:
 
-- `al_init` as `init`
+- `al_init` as `_init`
 - `al_malloc` as `malloc`
 - `al_free` as `free`
 - `al_realloc` as `realloc`

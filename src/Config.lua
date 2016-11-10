@@ -17,8 +17,17 @@
 
 --- @classmod lallegro.Config
 -- ALLEGRO_CONFIG wrapper metatable, a GC enabled object, with nice methods and
--- iterators. One can use sandboxed Lua files as config, but this might be
--- useful for some.
+-- iterators. One can use sandboxed Lua files as config (LuaConfig module), but
+-- this might be useful for some.
+--
+-- Config objects can be represented as Lua tables, and there's
+-- `Config:get_table` and `Config.from_table` for that.
+--
+-- The 'Table / Config' rules are:
+--
+-- + Values on the global section should be placed directly in the table
+-- + Extra sections are nested tables, and each key/value pair inside it
+--   compose the entry
 
 local al = require 'lallegro.core'
 
@@ -59,6 +68,36 @@ function Config:extract ()
 end
 
 --------------------------------------------------------------------------------
+--  Construction
+--  @section ctor
+--------------------------------------------------------------------------------
+
+--- Creates a new Config.
+function Config.new ()
+	return Config.wrap (al.create_config ())
+end
+
+--- Constructs a new Config object with the entries in passed table.
+--
+-- This follows the 'Table / Config' rules.
+function Config.from_table (t)
+	local config = Config.new ()
+	for k, v in pairs (t) do
+		-- entry in the global section
+		if type (v) ~= 'table' then
+			config:set (nil, k, v)
+		-- new section
+		else
+			for key, value in pairs (v) do
+				config:set (k, key, value)
+			end
+		end
+	end
+
+	return config
+end
+
+--------------------------------------------------------------------------------
 --  Getters
 --  @section getters
 --------------------------------------------------------------------------------
@@ -76,10 +115,28 @@ function Config:get (section, key)
 	return al.get_config_value (self.data, section, key)
 end
 
---- Get the configuration as a Lua table
+--- Get the configuration as a Lua table.
 --
--- The global section is stored at index "global"
--- TODO
+-- This follows the 'Table / Config' rules.
+--
+-- @treturn table Configuration in a Lua table
+function Config:get_table ()
+	local ret = {}
+	for sec in self:sections () do
+		local section
+		if sec == '' then
+			section = ret
+		else
+			section = {}
+			ret[sec] = section
+		end
+		for k, v in self:entries (sec) do
+			section[k] = v
+		end
+	end
+
+	return ret
+end
 
 --------------------------------------------------------------------------------
 --  Editing
@@ -261,15 +318,6 @@ end
 -- @return true on success, false otherwise
 function Config:save_f (file)
 	return al.save_config_file_f (file, self.data)
-end
-
---------------------------------------------------------------------------------
---  Constructor
---  @section ctor
---------------------------------------------------------------------------------
-
-function Config.new ()
-	return Config.wrap (al.create_config ())
 end
 
 return Config

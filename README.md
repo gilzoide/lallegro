@@ -9,6 +9,7 @@ Dependencies
 - [lua](http://www.lua.org/) >= 5.2
 - [Allegro](http://liballeg.org/) >= 5.2
 - [SWIG](http://swig.org/) (for building)
+- [CMake](https://cmake.org/) (for building)
 
 
 Using
@@ -33,8 +34,9 @@ Bindings
 addons. Functions are renamed so the prefix `al_` is removed, so the calls to
 functions use the Lua module as the Allegro namespace.
 
-A more Lua-style API is to be created as well, with auto destroyed objects,
-metatables/metamethods, functional stuff, etc... And it'll all be documented!
+A more Lua-style API is being created (the `.lua` files) as well, with auto
+destroyed objects, metatables/metamethods, iterators, functional stuff, etc...
+And it'll all be documented!
 
 Differences between the Allegro C API and this one is detailed in the
 [API diff document](apidiff.md).
