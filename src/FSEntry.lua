@@ -22,6 +22,7 @@ local al = require 'lallegro.core'
 local FSEntry = {}
 -- Let File objects call the methods
 FSEntry.__index = FSEntry
+FSEntry.__metatable = 'lallegro.FSEntry'
 
 --------------------------------------------------------------------------------
 --  Interface functions
@@ -158,6 +159,11 @@ end
 function FSEntry:size ()
 	return al.get_fs_entry_size (self.data)
 end
+
+--- Alias for `size`, so you can get FSEntry's size with Lua's `#` operator
+--
+-- @usage size = #fs_entry
+FSEntry.__len = FSEntry.size
 
 --------------------------------------------------------------------------------
 --  Directory

@@ -36,7 +36,8 @@ functions use the Lua module as the Allegro namespace.
 
 A more Lua-style API is being created (the `.lua` files) as well, with auto
 destroyed objects, metatables/metamethods, iterators, functional stuff, etc...
-And it'll all be documented!
+And it'll all be documented! See the [high level Lua wrappers document](luaapi.md)
+for an overview.
 
 Differences between the Allegro C API and this one is detailed in the
 [API diff document](apidiff.md).

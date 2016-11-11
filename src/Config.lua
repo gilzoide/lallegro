@@ -16,12 +16,12 @@
 --]]
 
 --- @classmod lallegro.Config
--- ALLEGRO_CONFIG wrapper metatable, a GC enabled object, with nice methods and
--- iterators. One can use sandboxed Lua files as config (LuaConfig module), but
--- this might be useful for some.
+-- `ALLEGRO_CONFIG` wrapper metatable, a GC enabled object, with nice methods
+-- and iterators. One can also use sandboxed Lua files as configuration
+-- (`LuaConfig` module).
 --
 -- Config objects can be represented as Lua tables, and there's
--- `Config:get_table` and `Config.from_table` for that.
+-- `Config:to_table` and `Config.from_table` for that.
 --
 -- The 'Table / Config' rules are:
 --
@@ -34,32 +34,33 @@ local al = require 'lallegro.core'
 local Config = {}
 -- Let Config objects call the methods
 Config.__index = Config
+Config.__metatable = 'lallegro.Config'
 
 --------------------------------------------------------------------------------
 --  Interface functions
 --  @section wrapper
 --------------------------------------------------------------------------------
 
---- Garbage collector should destroy the wrapped ALLEGRO_CONFIG.
+--- Garbage collector should destroy the wrapped `ALLEGRO_CONFIG`.
 --
--- If you plan to destroy the ALLEGRO_CONFIG manually, first `extract` it, as
+-- If you plan to destroy the `ALLEGRO_CONFIG` manually, first `extract` it, as
 -- `al_destroy_config` would double free the pointer.
 function Config:__gc ()
 	al.destroy_config (self.data)
 end
 
---- Wraps a ALLEGRO_CONFIG on a Config object
+--- Wraps a `ALLEGRO_CONFIG` on a Config object
 --
--- @param al_cfg ALLEGRO_CONFIG to be wrapped
+-- @param al_cfg `ALLEGRO_CONFIG` to be wrapped
 --
 -- @return Config object
 function Config.wrap (al_cfg)
 	return al_cfg and setmetatable ({ data = al_cfg }, Config)
 end
 
---- Extracts the wrapped ALLEGRO_CONFIG, so that it will not be GCed.
+--- Extracts the wrapped `ALLEGRO_CONFIG`, so that it will not be GCed.
 --
--- This sets the inner ALLEGRO_CONFIG pointer as `NULL`, so it is not safe to
+-- This sets the inner `ALLEGRO_CONFIG` pointer as `NULL`, so it is not safe to
 -- call any other methods after that.
 function Config:extract ()
 	local al_cfg = self.data
@@ -73,6 +74,8 @@ end
 --------------------------------------------------------------------------------
 
 --- Creates a new Config.
+--
+-- This is a wrapper for `al_create_config`
 function Config.new ()
 	return Config.wrap (al.create_config ())
 end
@@ -115,12 +118,12 @@ function Config:get (section, key)
 	return al.get_config_value (self.data, section, key)
 end
 
---- Get the configuration as a Lua table.
+--- Convert a configuration to a Lua table.
 --
 -- This follows the 'Table / Config' rules.
 --
 -- @treturn table Configuration in a Lua table
-function Config:get_table ()
+function Config:to_table ()
 	local ret = {}
 	for sec in self:sections () do
 		local section

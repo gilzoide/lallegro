@@ -24,6 +24,7 @@ local al = require 'lallegro.core'
 local File = {}
 -- Let File objects call the methods
 File.__index = File
+File.__metatable = 'lallegro.File'
 
 --------------------------------------------------------------------------------
 --  Interface functions
