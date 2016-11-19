@@ -27,7 +27,7 @@ it yourself. Don't copy the functions directly to the same table, as function
 names would clash (there are common functions, like `wrap`, `extract`, `__gc`,
 etc.).
 
-```
+```lua
 local al = require 'lallegro'
 al.Config = require 'lallegro.Config'
 

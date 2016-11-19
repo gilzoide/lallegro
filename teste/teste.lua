@@ -4,6 +4,7 @@
 al = require 'lallegro'
 assert (al.init ('image', 'font', 'ttf', 'native_dialog', 'primitives'))
 assert (al.install ('mouse'))
+al.Fullscreen = require 'lallegro.Fullscreen'
 
 local function printf (fmt, ...)
 	print (fmt:format (...))

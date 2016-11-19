@@ -92,6 +92,7 @@
 // Keyboard: OUTPUT on Lua
 %rename al_get_keyboard_state _get_keyboard_state;
 %include <allegro5/keyboard.h>
+%include <allegro5/keycodes.h>
 /* Memory: macros
  * I don't think Lua devs will be `malloc`ing stuff, but who knows
  * Devs are quite interesting beings

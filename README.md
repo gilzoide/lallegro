@@ -72,7 +72,7 @@ cmake):
 Documentation
 -------------
 The [Allegro Documentation](http://liballeg.org/a5docs/trunk/index.html) should
-be widly used, as _lallegro_ provides 1 to 1 bindings.
+be widely used, as _lallegro_ provides 1 to 1 bindings.
 
 [LDoc](https://github.com/stevedonovan/LDoc) used for documenting the Lua
 specific stuff. Generate with `ldoc .`
